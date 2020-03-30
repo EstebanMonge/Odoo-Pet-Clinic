@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_pet_klinik_client,pet_klinik.client,model_pet_klinik_client,,1,1,1,1
+access_pet_klinik_pet,pet_klinik.pet,model_pet_klinik_pet,,1,1,1,
+access_pet_klinik_pet_pet_type,pet_klinik.pet.pet_type,model_pet_klinik_pet_pet_type,,1,1,1,1
+access_pet_klinik_pet_breed,pet_klinik.pet.breed,model_pet_klinik_pet_breed,,1,1,1,1
+access_pet_klinik_appointment,pet_klinik.appointment,model_pet_klinik_appointment,,1,1,1,

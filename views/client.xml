@@ -1,0 +1,68 @@
+<odoo>
+  <data>
+    <record model="ir.ui.view" id="client_klinik_client_tree">
+      <field name="name">client_klinik.client_tree</field>
+      <field name="model">pet_klinik.client</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="client_id" />
+          <field name="name" />
+          <field name="phone" />
+          <field name="email" />
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="client_klinik_client_form">
+      <field name="name">client_klinik.client_form</field>
+      <field name="model">pet_klinik.client</field>
+      <field name="arch" type="xml">
+        <form string="Client">
+          <sheet>
+
+            <div class="oe_title">
+              <h1>
+                <field name="client_id" />
+              </h1>
+            </div>
+            <group>
+              <field name="image" widget="image" class="oe_avatar" />
+            </group>
+            <group>
+              <group>
+                <field name="name" />
+                <field name="age" />
+                <field name="gender" />
+              </group>
+              <group>
+                <field name="phone" />
+                <field name="email" />
+                <field name="address" />
+              </group>
+            </group>
+            <group>
+              <field name="pet" />
+            </group>
+          </sheet>
+          <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers" />
+            <field name="activity_ids" widget="mail_activity" />
+            <field name="message_ids" widget="mail_thread" options="{'post_refresh': 'recipients'}" />
+          </div>
+        </form>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="client_klinik_client_action_window">
+      <field name="name">Client</field>
+      <field name="res_model">pet_klinik.client</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem name="Pet Klinik" id="pet_klinik.menu_root" />
+
+    <menuitem name="Patient" id="pet_klinik.patient" parent="pet_klinik.menu_root" />
+
+    <menuitem name="Client" id="pet_klinik.menu_client" parent="pet_klinik.patient" action="client_klinik_client_action_window" />
+  </data>
+</odoo>

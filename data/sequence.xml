@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <data noupdate="1">
+        <!-- sequence pet -->
+        <record id="seq_id_pet" model="ir.sequence">
+            <field name="name">Pet ID</field>
+            <field name="code">pet.seq</field>
+            <field name="prefix">PP</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False" />
+        </record>
+        <!-- sequence client -->
+        <record id="seq_id_client" model="ir.sequence">
+            <field name="name">Client ID</field>
+            <field name="code">client.seq</field>
+            <field name="prefix">PC</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False" />
+        </record>
+        <!-- sequence appointment -->
+        <record id="seq_id_appointment" model="ir.sequence">
+            <field name="name">Appointment ID</field>
+            <field name="code">pet_appointment.seq</field>
+            <field name="prefix">PA/%(range_year)s/%(month)s/</field>
+            <field eval="1" name="number_next" />
+            <field eval="1" name="number_increment" />
+            <field eval="True" name="use_date_range" />
+            <field eval="False" name="company_id" />
+            <field name="padding">4</field>
+        </record>
+
+    </data>
+</odoo>
