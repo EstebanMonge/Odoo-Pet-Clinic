@@ -1,64 +1,179 @@
 <odoo>
-    <data>
-        <record model="ir.ui.view" id="pet_klinik_appointment_tree">
-            <field name="name">pet_klinik.appointment_tree</field>
-            <field name="model">pet_klinik.appointment</field>
-            <field name="arch" type="xml">
-                <tree>
-                    <field name="appointment_id" />
-                    <field name="pet" />
-                </tree>
-            </field>
-        </record>
+  <data>
+    <!-- Appointment Tree View -->
+    <record model="ir.ui.view" id="pet_klinik_appointment_tree">
+      <field name="name">pet_klinik.appointment_tree</field>
+      <field name="model">pet_klinik.appointment</field>
+      <field name="arch" type="xml">
+        <tree decoration-info="state == 'rancangan'" decoration-muted="state == 'dibatalkan'" decoration-success="state == 'selesai'" decoration-danger="state == 'sedang_diperiksa'">
+          <field name="appointment_id" />
+          <field name="pet" />
+          <field name="doctor" />
+          <field name="date_start" />
+          <field name="date_end" />
+          <field name="state" />
+        </tree>
+      </field>
+    </record>
 
-        <record model="ir.ui.view" id="pet_klinik_appointment_form">
-            <field name="name">pet_klinik.appointment_form</field>
-            <field name="model">pet_klinik.appointment</field>
-            <field name="arch" type="xml">
-                <form string="Pet">
-                    <sheet>
-                        <div class="oe_title">
-                            <h1>
-                                <field name="appointment_id" />
-                            </h1>
-                        </div>
-                        <group name="data">
-                            <group>
-                                <field name="pet" />
-                            </group>
-                            <group></group>
-                        </group>
-                    </sheet>
-                    <div class="oe_chatter">
-                        <field name="message_follower_ids" widget="mail_followers" />
-                        <field name="activity_ids" widget="mail_activity" />
-                        <field name="message_ids" widget="mail_thread" options="{'post_refresh': 'recipients'}" />
-                    </div>
-                </form>
-            </field>
-        </record>
-        <!-- <record id="pet_klinik_appointment_calendar" model="ir.ui.view">
-            <field name="name">pet_klinik.appointment_calendar</field>
-            <field name="model">pet_klinik.appointment</field>
-            <field name="arch" type="xml">
-                <calendar string="Kalender Janji" color="pet" mode="month" quick_add="True">
-                    <field name="id" />
-                    <field name="pet" />
-                </calendar>
-            </field>
-        </record> -->
+    <!-- Appointment Form View -->
+    <record model="ir.ui.view" id="pet_klinik_appointment_form">
+      <field name="name">pet_klinik.appointment_form</field>
+      <field name="model">pet_klinik.appointment</field>
+      <field name="arch" type="xml">
+        <form string="Pet">
+          <header>
+            <button name="action_check" type="object" string="Periksa" class="oe_highlight" states="rancangan" />
+            <button name="action_done" type="object" string="Selesai" class="oe_highlight" attrs="{'invisible': [('state','!=', 'sedang_diperiksa')]}" />
+            <button name="action_cancel" type="object" string="Batalkan" />
+            <field name="state" widget="statusbar" statusbar_visible="rancangan,sedang_diperiksa,selesai" />
+          </header>
+          <sheet>
+            <div class="oe_title">
+              <h1>
+                <field name="appointment_id" />
+              </h1>
+            </div>
+            <group name="data">
+              <group>
+                <field name="pet_id" />
+                <field name="pet" />
+                <field name="pet_owner" />
+              </group>
+              <group>
+                <field name="doctor" />
+                <field name="date_start" />
+                <field name="date_end" />
+              </group>
+            </group>
+          </sheet>
+          <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers" />
+            <field name="activity_ids" widget="mail_activity" />
+            <field name="message_ids" widget="mail_thread" options="{'post_refresh': 'recipients'}" />
+          </div>
+        </form>
+      </field>
+    </record>
 
-        <record model="ir.actions.act_window" id="pet_klinik_appointment_action_window">
-            <field name="name">Appointment</field>
-            <field name="res_model">pet_klinik.appointment</field>
-            <field name="view_mode">tree,form</field>
+    <!-- Appointment Kanban View -->
+    <record id="pet_klinik_appointment_kanban" model="ir.ui.view">
+      <field name="name">pet_klinik.appointment_kanban</field>
+      <field name="model">pet_klinik.appointment</field>
+      <field name="arch" type="xml">
+        <kanban default_group_by="state" class="o_kanban_small_column">
+          <field name="id" />
+          <field name="appointment_id" />
+          <field name="doctor" />
+          <field name="pet" />
+          <field name="date_start" />
+          <templates>
+            <t t-name="kanban-box">
+              <div t-attf-class="oe_kanban_global_click">
+                <div class="row mb4">
+                  <div class="col-6">
+                    <strong>
+                      <span>
+                        <field name="appointment_id" />
+                      </span>
+                    </strong>
+                  </div>
+                  <div class="col-6 text-right">
+                    <strong>
+                      <i class="fa fa-clock-o" role="img" aria-label="Date" title="Date" />
+                      <field name="date_start" position="attributes">
+                        <attribute name="t-options">{"format": "dd/MM/yyyy"}</attribute>
+                      </field>
+                    </strong>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12">
+                    <span>
+                      Patient :
+                      <field name="pet" />
+                    </span>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    Doctor :
+                    <field name="doctor_name" />
+                  </div>
+                  <div class="col-6">
+                    <span class="float-right" style="font-size:16px;">
+                      <field name="state" widget="label_selection" options="{'classes': {'rancangan': 'info', 'sedang_diperiksa': 'warning', 'selesai': 'success', 'dibatalkan': 'danger'}}" />
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </t>
+          </templates>
+        </kanban>
+      </field>
+    </record>
 
-        </record>
+    <!-- Appointment Calendar View-->
+    <record id="pet_klinik_appointment_calendar" model="ir.ui.view">
+      <field name="name">pet_klinik.appointment_calendar</field>
+      <field name="model">pet_klinik.appointment</field>
+      <field name="arch" type="xml">
+        <calendar string="Appointment Calendar" date_start="date_start" color="pet_id" mode="month" quick_add="True">
+          <field name="appointment_id" />
+          <field name="pet_id" />
+          <field name="pet" />
+          <field name="doctor_name" />
+        </calendar>
+      </field>
+    </record>
 
-        <menuitem name="Pet Klinik" id="pet_klinik.menu_root" />
+    <!-- Appointment Graph View -->
+    <record id="pet_klinik_pet_graph" model="ir.ui.view">
+      <field name="name">pet_klinik.pet_graph</field>
+      <field name="model">pet_klinik.appointment</field>
+      <field name="arch" type="xml">
+        <graph string="Appointment Graph" type="pie">
+          <field name="date_start" />
+          <field name="doctor_name" type="measure" />
+          <field name="date_start" type="measure" />
+        </graph>
+      </field>
+    </record>
 
-        <menuitem name="Appointment" id="pet_klinik.appointment" parent="pet_klinik.menu_root" action="pet_klinik_appointment_action_window" />
+    <!-- Appointment Search View -->
+    <record id="pet_klinik_appointment_search" model="ir.ui.view">
+      <field name="name">pet_klinik.appointment_search</field>
+      <field name="model">pet_klinik.appointment</field>
+      <field name="arch" type="xml">
+        <search string="Search Appointment">
+          <field name="appointment_id" filter_domain="[('appointment_id', 'ilike', self)]" />
+          <field name="doctor_name" />
+          <field name="date_start" />
+          <separator />
+          <filter string="Today" name="date_today" domain="[('date_start', '&gt;=', datetime.datetime.now().strftime('%Y-%m-%d 00:00:00')),('date_start', '&lt;=',datetime.datetime.now().strftime('%Y-%m-%d 23:23:59'))]" />
+          <filter string="Rancangan" name="rancangan" domain="[('state', '=', 'rancangan')]" />
+          <filter string="Sedang Diperiksa" name="sedang_diperiksa" domain="[('state', '=', 'sedang_diperiksa')]" />
+          <filter string="Selesai" name="selesai" domain="[('state', '=', 'selesai')]" />
+          <filter string="Dibatalkan" name="dibatalkan" domain="[('state', '=', 'dibatalkan')]" />
+          <group expand="0" string="Group By">
+            <filter string="Status" name="state" context="{'group_by':'state'}" />
+          </group>
+        </search>
+      </field>
+    </record>
 
+    <!-- Appointment Action Window -->
+    <record model="ir.actions.act_window" id="pet_klinik_appointment_action_window">
+      <field name="name">Appointment</field>
+      <field name="res_model">pet_klinik.appointment</field>
+      <field name="view_mode">calendar,tree,form,kanban,graph</field>
+      <field name="context">{'search_default_date_today': 1}</field>
+    </record>
 
-    </data>
+    <!-- Menu Root -->
+    <menuitem name="Pet Klinik" id="pet_klinik.menu_root" />
+
+    <!-- Menu Appointment -->
+    <menuitem name="Appointment" id="pet_klinik.appointment" parent="pet_klinik.menu_root" action="pet_klinik_appointment_action_window" />
+  </data>
 </odoo>

@@ -21,9 +21,9 @@ class Pet(models.Model):
                            string='Jenis', required=True)
     breed = fields.Many2one('pet_klinik.pet.breed', domain="[('type','=',type)]",
                             string='Ras')
-    owner = fields.Many2one('pet_klinik.client', string='owner')
-    appointment = fields.Many2many(
-        'pet_klinik.appointment', 'pet', string='Janji')
+    owner = fields.Many2one('pet_klinik.client', store=True)
+    owner_name = fields.Char(related='owner.name',
+                             string='owner')
 
     @api.model
     def create(self, vals):

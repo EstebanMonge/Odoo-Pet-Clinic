@@ -9,14 +9,14 @@ class Client(models.Model):
     _rec_name = 'name'
 
     client_id = fields.Char(string='ID', required=True, copy=False, readonly=True,
-                                 index=True, default=lambda self: _('New'))
+                            index=True, default=lambda self: _('New'))
     name = fields.Char(string="Nama", required=True)
     gender = fields.Selection([
         ('laki-laki', 'Laki-laki'),
         ('perempuan', 'Perempuan'),
     ], default='laki-laki', string="Gender", required=True)
     age = fields.Integer(string='Umur', required=True)
-    image = fields.Binary(string='Foto')
+    image = fields.Binary(string='Foto', attachment=True)
     pet = fields.One2many('pet_klinik.pet', 'owner',
                           string="Hewan Peliharaan")
     phone = fields.Integer(string='No Telepon', required=True)
