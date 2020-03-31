@@ -150,7 +150,7 @@
           <field name="doctor_name" />
           <field name="date_start" />
           <separator />
-          <filter string="Today" name="date_today" domain="[('date_start', '&gt;=', datetime.datetime.now().strftime('%Y-%m-%d 00:00:00')),('date_start', '&lt;=',datetime.datetime.now().strftime('%Y-%m-%d 23:23:59'))]" />
+          <filter string="Hari ini" name="date_today" domain="[('date_start', '&gt;=', datetime.datetime.now().strftime('%Y-%m-%d 00:00:00')),('date_start', '&lt;=',datetime.datetime.now().strftime('%Y-%m-%d 23:23:59'))]" />
           <filter string="Rancangan" name="rancangan" domain="[('state', '=', 'rancangan')]" />
           <filter string="Sedang Diperiksa" name="sedang_diperiksa" domain="[('state', '=', 'sedang_diperiksa')]" />
           <filter string="Selesai" name="selesai" domain="[('state', '=', 'selesai')]" />
