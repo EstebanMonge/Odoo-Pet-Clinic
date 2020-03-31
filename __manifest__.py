@@ -33,7 +33,7 @@
     # only loaded in demonstration mode
     'demo': [
         'demo/demo.xml',
-    ], 'images': ['static/description/icon.png'],
+    ],
     'installable': True,
     'application': True,
     'auto_install': False,
