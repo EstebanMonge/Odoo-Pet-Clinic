@@ -6,7 +6,7 @@
       <field name="name">pet_klinik.pet_tree</field>
       <field name="model">pet_klinik.pet</field>
       <field name="arch" type="xml">
-        <tree>
+        <tree string="Pet" create="false">
           <field name="pet_id" />
           <field name="name" />
           <field name="owner_name" />
@@ -20,7 +20,7 @@
       <field name="name">pet_klinik.pet_form</field>
       <field name="model">pet_klinik.pet</field>
       <field name="arch" type="xml">
-        <form string="Pet">
+        <form string="Pet" create="false">
           <sheet>
             <div class="oe_title">
               <h1>

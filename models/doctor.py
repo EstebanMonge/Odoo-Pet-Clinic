@@ -17,11 +17,11 @@ class Doctor(models.Model):
     ], default='laki-laki', string="Gender", required=True)
     age = fields.Integer(string='Umur', required=True)
     image = fields.Binary(string='Foto')
-    phone = fields.Integer(string='No Telepon', required=True)
+    phone = fields.Char(string='No Telepon', required=True)
     email = fields.Char(string='Email')
     address = fields.Text(string='Alamat')
     speciality = fields.Many2one(
-        'pet_klinik.doctor.speciality', string='Spesialis')
+        'pet_klinik.doctor.speciality', string='Spesialis',  required=True)
     speciality_name = fields.Char(related='speciality.name',
                                   string='Spesialis')
     rec_name = fields.Char(string='Recname',

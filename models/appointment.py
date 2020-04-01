@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, _
-from datetime import datetime
+from datetime import date
+from odoo.addons.as_time.models import alsw
 
 
 class Appointment(models.Model):
@@ -15,9 +16,9 @@ class Appointment(models.Model):
         'pet_klinik.pet', string='Binatang Peliharan', required=True)
     pet_id = fields.Char(related='pet.pet_id', string='ID Binatang Peliharaan')
     pet_owner = fields.Char(related='pet.owner_name', string='Owner')
-    date_start = fields.Datetime(
-        string='Tanggal Mulai', required=True, default=datetime.now())
-    date_end = fields.Datetime(string='Tanggal Berakhir')
+    date = fields.Date(
+        string='Tanggal', required=True, default=date.today())
+    time = alsw.Time(string='Waktu')
     doctor = fields.Many2one(
         'pet_klinik.doctor', string='Dokter', required=True)
     doctor_name = fields.Char(related='doctor.name', string='Dokter')

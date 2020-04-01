@@ -9,8 +9,8 @@
           <field name="appointment_id" />
           <field name="pet" />
           <field name="doctor" />
-          <field name="date_start" />
-          <field name="date_end" />
+          <field name="date" />
+          <field name="time" />
           <field name="state" />
         </tree>
       </field>
@@ -42,8 +42,8 @@
               </group>
               <group>
                 <field name="doctor" />
-                <field name="date_start" />
-                <field name="date_end" />
+                <field name="date" />
+                <field name="time" />
               </group>
             </group>
           </sheet>
@@ -66,7 +66,7 @@
           <field name="appointment_id" />
           <field name="doctor" />
           <field name="pet" />
-          <field name="date_start" />
+          <field name="date" />
           <templates>
             <t t-name="kanban-box">
               <div t-attf-class="oe_kanban_global_click">
@@ -80,19 +80,21 @@
                   </div>
                   <div class="col-6 text-right">
                     <strong>
-                      <i class="fa fa-clock-o" role="img" aria-label="Date" title="Date" />
-                      <field name="date_start" position="attributes">
-                        <attribute name="t-options">{"format": "dd/MM/yyyy"}</attribute>
-                      </field>
+                      <i class="fa fa-calendar" role="img" aria-label="Date" title="Date" />
+                      <field name="date" />
                     </strong>
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-12">
+                  <div class="col-6">
                     <span>
                       Patient :
                       <field name="pet" />
                     </span>
+                  </div>
+                  <div class="col-6  text-right">
+                    <i class="fa fa-clock-o" role="img" aria-label="Time" title="Time" />
+                    <field name="time" />
                   </div>
                 </div>
                 <div class="row">
@@ -118,14 +120,14 @@
       <field name="name">pet_klinik.appointment_calendar</field>
       <field name="model">pet_klinik.appointment</field>
       <field name="arch" type="xml">
-        <calendar string="Appointment Calendar" date_start="date_start" color="pet_id" mode="month" quick_add="True">
+        <calendar string="Appointment Calendar" date_start="date" color="pet_id" mode="month" quick_add="True">
           <field name="appointment_id" />
-          <field name="pet_id" />
           <field name="pet" />
-          <field name="doctor_name" />
+          <field name="doctor" />
         </calendar>
       </field>
     </record>
+
 
     <!-- Appointment Graph View -->
     <record id="pet_klinik_pet_graph" model="ir.ui.view">
@@ -133,9 +135,9 @@
       <field name="model">pet_klinik.appointment</field>
       <field name="arch" type="xml">
         <graph string="Appointment Graph" type="pie">
-          <field name="date_start" />
+          <field name="date" />
           <field name="doctor_name" type="measure" />
-          <field name="date_start" type="measure" />
+          <field name="date" type="measure" />
         </graph>
       </field>
     </record>
@@ -148,9 +150,9 @@
         <search string="Search Appointment">
           <field name="appointment_id" filter_domain="[('appointment_id', 'ilike', self)]" />
           <field name="doctor_name" />
-          <field name="date_start" />
+          <field name="date" />
           <separator />
-          <filter string="Hari ini" name="date_today" domain="[('date_start', '&gt;=', datetime.datetime.now().strftime('%Y-%m-%d 00:00:00')),('date_start', '&lt;=',datetime.datetime.now().strftime('%Y-%m-%d 23:23:59'))]" />
+          <filter string="Hari ini" name="date_today" domain="[('date', '=', datetime.date.today().strftime('%Y-%m-%d'))]" />
           <filter string="Rancangan" name="rancangan" domain="[('state', '=', 'rancangan')]" />
           <filter string="Sedang Diperiksa" name="sedang_diperiksa" domain="[('state', '=', 'sedang_diperiksa')]" />
           <filter string="Selesai" name="selesai" domain="[('state', '=', 'selesai')]" />
@@ -166,7 +168,7 @@
     <record model="ir.actions.act_window" id="pet_klinik_appointment_action_window">
       <field name="name">Appointment</field>
       <field name="res_model">pet_klinik.appointment</field>
-      <field name="view_mode">calendar,tree,form,kanban,graph</field>
+      <field name="view_mode">tree,form,kanban,calendar,graph</field>
       <field name="context">{'search_default_date_today': 1}</field>
     </record>
 

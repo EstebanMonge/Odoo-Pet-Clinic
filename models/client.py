@@ -19,7 +19,7 @@ class Client(models.Model):
     image = fields.Binary(string='Foto', attachment=True)
     pet = fields.One2many('pet_klinik.pet', 'owner',
                           string="Hewan Peliharaan")
-    phone = fields.Integer(string='No Telepon', required=True)
+    phone = fields.Char(string='No Telepon', required=True)
     email = fields.Char(string='Email')
     address = fields.Text(string='Alamat')
 
@@ -30,3 +30,7 @@ class Client(models.Model):
                 'client.seq') or _('New')
         result = super(Client, self).create(vals)
         return result
+
+    @api.onchange('pet')
+    def pet_onchange(self):
+        return {'domain': {'pet': [('owner', '=', False)]}}
