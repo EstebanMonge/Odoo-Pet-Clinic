@@ -22,10 +22,12 @@ class Pet(models.Model):
     type_name = fields.Char(related='type.name',
                             string='Jenis')
     breed = fields.Many2one('pet_klinik.pet.breed', domain="[('type','=',type)]",
-                            string='Ras',required=True)
+                            string='Ras', required=True)
     breed_name = fields.Char(related='breed.name',
                              string='Ras')
     owner = fields.Many2one('pet_klinik.client')
+    owner_name = fields.Char(related='owner.name',
+                             string='Owner')
     owner_name = fields.Char(related='owner.name',
                              string='Owner')
     rec_name = fields.Char(string='Recname',

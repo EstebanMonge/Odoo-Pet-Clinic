@@ -88,7 +88,6 @@
                 <div class="row">
                   <div class="col-6">
                     <span>
-                      Patient :
                       <field name="pet" />
                     </span>
                   </div>
@@ -99,8 +98,10 @@
                 </div>
                 <div class="row">
                   <div class="col-6">
-                    Doctor :
-                    <field name="doctor_name" />
+                    <span>
+                      Dokter
+                      <field name="doctor_name" />
+                    </span>
                   </div>
                   <div class="col-6">
                     <span class="float-right" style="font-size:16px;">

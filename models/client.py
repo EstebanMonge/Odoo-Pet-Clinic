@@ -17,11 +17,17 @@ class Client(models.Model):
     ], default='laki-laki', string="Gender", required=True)
     age = fields.Integer(string='Umur', required=True)
     image = fields.Binary(string='Foto', attachment=True)
-    pet = fields.One2many('pet_klinik.pet', 'owner',
-                          string="Hewan Peliharaan")
     phone = fields.Char(string='No Telepon', required=True)
     email = fields.Char(string='Email')
     address = fields.Text(string='Alamat')
+
+    pet = fields.One2many('pet_klinik.pet', 'owner',
+                          string="Hewan Peliharaan")
+    pet_count = fields.Integer(compute='compute_pet_count')
+
+    appointment = fields.Many2many('pet_klinik.appointment', 'client',
+                                   string="Appointment")
+    appointment_count = fields.Integer(compute='compute_appointment_count')
 
     @api.model
     def create(self, vals):
@@ -31,6 +37,41 @@ class Client(models.Model):
         result = super(Client, self).create(vals)
         return result
 
-    @api.onchange('pet')
-    def pet_onchange(self):
-        return {'domain': {'pet': [('owner', '=', False)]}}
+    # Button Pet Handle
+    @api.multi
+    def open_client_pet(self):
+        return {
+            'name': _('Pets'),
+            'domain': [('owner', '=', self.id)],
+            'view_type': 'form',
+            'res_model': 'pet_klinik.pet',
+            'view_id': False,
+            'view_mode': 'tree,form',
+            'type': 'ir.actions.act_window',
+        }
+    # Button Pet Count
+
+    def compute_pet_count(self):
+        for record in self:
+            record.pet_count = self.env['pet_klinik.pet'].search_count(
+                [('owner', '=', self.id)])
+
+    # Button Appointment Handle
+    @api.multi
+    def open_client_appointment(self):
+        return {
+            'name': _('Appointments'),
+            'domain': [('client', '=', self.id)],
+            'view_type': 'form',
+            'res_model': 'pet_klinik.appointment',
+            'view_id': False,
+            'view_mode': 'tree,form',
+            'type': 'ir.actions.act_window',
+        }
+
+    # Button Appointment Count
+
+    def compute_appointment_count(self):
+        for record in self:
+            record.appointment_count = self.env['pet_klinik.appointment'].search_count(
+                [('client', '=', self.id)])

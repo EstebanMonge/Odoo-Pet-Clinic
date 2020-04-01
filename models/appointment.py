@@ -12,22 +12,26 @@ class Appointment(models.Model):
 
     appointment_id = fields.Char(string='ID', required=True, copy=False, readonly=True,
                                  index=True, default=lambda self: _('New'))
-    pet = fields.Many2one(
-        'pet_klinik.pet', string='Binatang Peliharan', required=True)
-    pet_id = fields.Char(related='pet.pet_id', string='ID Binatang Peliharaan')
-    pet_owner = fields.Char(related='pet.owner_name', string='Owner')
     date = fields.Date(
         string='Tanggal', required=True, default=date.today())
     time = alsw.Time(string='Waktu')
-    doctor = fields.Many2one(
-        'pet_klinik.doctor', string='Dokter', required=True)
-    doctor_name = fields.Char(related='doctor.name', string='Dokter')
     state = fields.Selection([
         ('rancangan', 'Rancangan'),
         ('sedang_diperiksa', 'Sedang Diperiksa'),
         ('selesai', 'Selesai'),
         ('dibatalkan', 'Dibatalkan'),
     ], string='Status', default='rancangan')
+
+    pet = fields.Many2one(
+        'pet_klinik.pet', string='Binatang Peliharan', required=True)
+    pet_id = fields.Char(related='pet.pet_id', string='ID Binatang Peliharaan')
+    pet_owner = fields.Char(related='pet.owner_name', string='Owner')
+
+    client = fields.Many2one('pet_klinik.client')
+
+    doctor = fields.Many2one(
+        'pet_klinik.doctor', string='Dokter', required=True)
+    doctor_name = fields.Char(related='doctor.name', string='Dokter')
 
     @api.model
     def create(self, vals):

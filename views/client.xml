@@ -2,8 +2,8 @@
   <data>
 
     <!-- Client Tree View -->
-    <record model="ir.ui.view" id="client_klinik_client_tree">
-      <field name="name">client_klinik.client_tree</field>
+    <record model="ir.ui.view" id="pet_klinik_client_tree">
+      <field name="name">pet_klinik.client_tree</field>
       <field name="model">pet_klinik.client</field>
       <field name="arch" type="xml">
         <tree>
@@ -16,12 +16,21 @@
     </record>
 
     <!-- Client Form View -->
-    <record model="ir.ui.view" id="client_klinik_client_form">
-      <field name="name">client_klinik.client_form</field>
+    <record model="ir.ui.view" id="pet_klinik_client_form">
+      <field name="name">pet_klinik.client_form</field>
       <field name="model">pet_klinik.client</field>
       <field name="arch" type="xml">
         <form string="Client">
           <sheet>
+            <!-- Client Button Box -->
+            <div class="oe_button_box" name="button_box">
+              <button name="open_client_pet" class="oe_stat_button" type="object" icon="fa-paw">
+                <field string="Binatang Peliharaan" name="pet_count" widget="statinfo" />
+              </button>
+              <button name="open_client_appointment" class="oe_stat_button" type="object" icon="fa-calendar">
+                <field string="Janji" name="appointment_count" widget="statinfo" />
+              </button>
+            </div>
             <div class="oe_title">
               <h1>
                 <field name="client_id" />
@@ -42,9 +51,14 @@
                 <field name="address" />
               </group>
             </group>
-            <group>
-              <field name="pet" />
-            </group>
+            <notebook>
+              <page string="Pets">
+                <field name="pet" />
+              </page>
+              <page string="Appointments">
+                <field name="appointment" />
+              </page>
+            </notebook>
           </sheet>
           <div class="oe_chatter">
             <field name="message_follower_ids" widget="mail_followers" />
@@ -55,7 +69,7 @@
       </field>
     </record>
 
-    <!-- Client Kanban Menu -->
+    <!-- Client Kanban View -->
     <record id="pet_klinik_client_kanban" model="ir.ui.view">
       <field name="name">pet_klinik.client_kanban</field>
       <field name="model">pet_klinik.client</field>
