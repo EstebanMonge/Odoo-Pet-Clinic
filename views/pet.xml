@@ -2,26 +2,33 @@
   <data>
 
     <!-- Pet Tree View -->
-    <record model="ir.ui.view" id="pet_klinik_pet_tree">
-      <field name="name">pet_klinik.pet_tree</field>
-      <field name="model">pet_klinik.pet</field>
+    <record model="ir.ui.view" id="pet_clinic_pet_tree">
+      <field name="name">pet_clinic.pet_tree</field>
+      <field name="model">pet_clinic.pet</field>
       <field name="arch" type="xml">
         <tree string="Pet">
           <field name="pet_id" />
           <field name="name" />
           <field name="owner_name" />
-          <field name="type" />
+          <field name="pet_type" />
         </tree>
       </field>
     </record>
 
     <!-- Pet Form View -->
-    <record model="ir.ui.view" id="pet_klinik_pet_form">
-      <field name="name">pet_klinik.pet_form</field>
-      <field name="model">pet_klinik.pet</field>
+    <record model="ir.ui.view" id="pet_clinic_pet_form">
+      <field name="name">pet_clinic.pet_form</field>
+      <field name="model">pet_clinic.pet</field>
       <field name="arch" type="xml">
         <form string="Pet">
           <sheet>
+            <!-- Pet Button Box -->
+            <div class="oe_button_box" name="button_box">
+              <!-- Pet Appointment Button -->
+              <button name="open_pet_appointment" class="oe_stat_button" type="object" icon="fa-calendar">
+                <field string="Janji" name="appointment_count" widget="statinfo" />
+              </button>
+            </div>
             <div class="oe_title">
               <h1>
                 <field name="pet_id" />
@@ -37,10 +44,13 @@
                 <field name="gender" />
               </group>
               <group>
-                <field name="type" />
-                <field name="breed" />
-                <field name="owner_name" />
+                <field name="pet_type" />
+                <field name="pet_breed" />
+                <field name="owner" />
               </group>
+            </group>
+            <group>
+              <field name="description" />
             </group>
           </sheet>
           <div class="oe_chatter">
@@ -53,9 +63,9 @@
     </record>
 
     <!-- Pet Kanban View -->
-    <record id="pet_klinik_pet_kanban" model="ir.ui.view">
-      <field name="name">pet_klinik.pet_kanban</field>
-      <field name="model">pet_klinik.pet</field>
+    <record id="pet_clinic_pet_kanban" model="ir.ui.view">
+      <field name="name">pet_clinic.pet_kanban</field>
+      <field name="model">pet_clinic.pet</field>
       <field name="arch" type="xml">
         <kanban>
           <field name="id" />
@@ -63,16 +73,16 @@
           <field name="name" />
           <field name="age" />
           <field name="owner_name" />
-          <field name="type" />
-          <field name="breed" />
+          <field name="pet_type" />
+          <field name="pet_breed" />
           <templates>
             <t t-name="kanban-box">
-              <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_pet_klinik_pet_kanban">
+              <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_pet_clinic_pet_kanban">
                 <t t-if="record.image.raw_value">
-                  <div class="o_kanban_image_fill_left d-none d-md-block" t-attf-style="background-image:url('#{kanban_image('pet_klinik.pet', 'image', record.id.raw_value)}')" />
+                  <div class="o_kanban_image_fill_left d-none d-md-block" t-attf-style="background-image:url('#{kanban_image('pet_clinic.pet', 'image', record.id.raw_value)}')" />
                 </t>
                 <t t-else="">
-                  <img class="o_kanban_image" alt="Avatar" t-att-src="_s + '/pet_klinik/static/avatar/pet_avatar.png'" />
+                  <img class="o_kanban_image" alt="Avatar" t-att-src="_s + '/pet_clinic/static/avatar/pet_avatar.png'" />
                 </t>
                 <div class="oe_kanban_details">
                   <strong class="o_kanban_record_title">
@@ -85,17 +95,16 @@
                       <field name="owner_name" />
                     </li>
                     <li>
-                      Umur :
+                      Age :
                       <field name="age" />
                     </li>
                     <li>
-                      Jenis :
+                      Type :
                       <span>
-                        <field name="type" />
+                        <field name="pet_type" />
                         -
-                        <field name="breed" />
+                        <field name="pet_breed" />
                       </span>
-
                     </li>
                   </ul>
                 </div>
@@ -107,54 +116,50 @@
     </record>
 
     <!-- Pet Graph View -->
-    <record id="pet_klinik_pet_graph" model="ir.ui.view">
-      <field name="name">pet_klinik.pet_graph</field>
-      <field name="model">pet_klinik.pet</field>
+    <record id="pet_clinic_pet_graph" model="ir.ui.view">
+      <field name="name">pet_clinic.pet_graph</field>
+      <field name="model">pet_clinic.pet</field>
       <field name="arch" type="xml">
         <graph string="Pet Graph" type="pie">
-          <field name="name" />
-          <field name="type" type="measure" />
-          <field name="breed" type="measure" />
+          <field name="pet_type" />
         </graph>
       </field>
     </record>
 
     <!-- Pet Search View -->
-    <record id="pet_klinik_pet_search" model="ir.ui.view">
-      <field name="name">pet_klinik.pet_search</field>
-      <field name="model">pet_klinik.pet</field>
+    <record id="pet_clinic_pet_search" model="ir.ui.view">
+      <field name="name">pet_clinic.pet_search</field>
+      <field name="model">pet_clinic.pet</field>
       <field name="arch" type="xml">
         <search string="Search Pet">
-          <field name="name" filter_domain="['|',('name', 'ilike', self),('pet_id', 'ilike', self)]" />
-          <field name="pet_id" />
-          <field name="name" />
-          <field name="type" />
+          <field name="name" filter_domain="['|',('name', 'ilike', self)]" />
+          <field name="pet_type" />
           <separator />
-          <filter string="Jantan" name="male" domain="[('gender', '=', 'jantan')]" />
-          <filter string="Betina" name="female" domain="[('gender', '=', 'betina')]" />
+          <filter string="Male" name="male" domain="[('gender', '=', 'male')]" />
+          <filter string="Female" name="female" domain="[('gender', '=', 'female')]" />
           <group expand="0" string="Group By">
             <filter string="Gender" name="gender" context="{'group_by':'gender'}" />
-            <filter string="Jenis" name="type" context="{'group_by':'type'}" />
-            <filter string="Ras" name="breed" context="{'group_by':'breed'}" />
+            <filter string="Type" name="pet_type" context="{'group_by':'pet_type'}" />
+            <filter string="Breed" name="pet_breed" context="{'group_by':'pet_breed'}" />
           </group>
         </search>
       </field>
     </record>
 
     <!-- Pet Action Window -->
-    <record model="ir.actions.act_window" id="pet_klinik_pet_action_window">
+    <record model="ir.actions.act_window" id="pet_clinic_pet_action_window">
       <field name="name">Pet</field>
-      <field name="res_model">pet_klinik.pet</field>
+      <field name="res_model">pet_clinic.pet</field>
       <field name="view_mode">tree,form,kanban,graph</field>
     </record>
 
     <!-- Menu Root -->
-    <menuitem name="Pet Klinik" id="pet_klinik.menu_root" />
+    <menuitem name="Pet Clinic" id="pet_clinic.root_menu" />
 
     <!-- Menu Patient -->
-    <menuitem name="Patient" id="pet_klinik.patient" parent="pet_klinik.menu_root" />
+    <menuitem name="Patient" id="pet_clinic.patient" parent="pet_clinic.root_menu" />
 
     <!-- Menu Patient -> Pet -->
-    <menuitem name="Pet" id="pet_klinik.menu_pet" parent="pet_klinik.patient" action="pet_klinik_pet_action_window" />
+    <menuitem name="Pet" id="pet_clinic.menu_pet" parent="pet_clinic.patient" action="pet_clinic_pet_action_window" />
   </data>
 </odoo>

@@ -1,37 +1,40 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, _
-from datetime import date
+from datetime import date, datetime
 from odoo.addons.as_time.models import alsw
 
 
 class Appointment(models.Model):
-    _name = 'pet_klinik.appointment'
+    _name = 'pet_clinic.appointment'
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _rec_name = 'appointment_id'
 
     appointment_id = fields.Char(string='ID', required=True, copy=False, readonly=True,
                                  index=True, default=lambda self: _('New'))
     date = fields.Date(
-        string='Tanggal', required=True, default=date.today())
-    time = alsw.Time(string='Waktu')
+        string='Date', required=True, default=date.today())
+    time = alsw.Time(string='Time', required=True)
     state = fields.Selection([
-        ('rancangan', 'Rancangan'),
-        ('sedang_diperiksa', 'Sedang Diperiksa'),
-        ('selesai', 'Selesai'),
-        ('dibatalkan', 'Dibatalkan'),
-    ], string='Status', default='rancangan')
+        ('draft', 'Draft'),
+        ('in_process', 'In Process'),
+        ('done', 'done'),
+        ('canceled', 'canceled'),
+    ], string='Status', default='draft')
+    description = fields.Text(string='Description')
 
+    # Pet
     pet = fields.Many2one(
-        'pet_klinik.pet', string='Binatang Peliharan', required=True)
-    pet_id = fields.Char(related='pet.pet_id', string='ID Binatang Peliharaan')
+        'pet_clinic.pet', required=True)
+    pet_id = fields.Char(related='pet.pet_id', string='Pet ID')
+    pet_owner_id = fields.Integer(
+        related='pet.owner_id')
     pet_owner = fields.Char(related='pet.owner_name', string='Owner')
 
-    client = fields.Many2one('pet_klinik.client')
-
+    # Doctor
     doctor = fields.Many2one(
-        'pet_klinik.doctor', string='Dokter', required=True)
-    doctor_name = fields.Char(related='doctor.name', string='Dokter')
+        'pet_clinic.doctor', required=True)
+    doctor_name = fields.Char(related='doctor.name', string='Doctor')
 
     @api.model
     def create(self, vals):
@@ -43,12 +46,12 @@ class Appointment(models.Model):
 
     def action_check(self):
         for rec in self:
-            rec.state = 'sedang_diperiksa'
+            rec.state = 'in_process'
 
     def action_done(self):
         for rec in self:
-            rec.state = 'selesai'
+            rec.state = 'done'
 
     def action_cancel(self):
         for rec in self:
-            rec.state = 'dibatalkan'
+            rec.state = 'canceled'

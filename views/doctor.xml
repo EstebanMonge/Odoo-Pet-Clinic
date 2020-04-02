@@ -1,11 +1,11 @@
 <odoo>
   <data>
     <!-- Doctor Tree View -->
-    <record model="ir.ui.view" id="doctor_klinik_doctor_tree">
-      <field name="name">doctor_klinik.doctor_tree</field>
-      <field name="model">pet_klinik.doctor</field>
+    <record model="ir.ui.view" id="doctor_clinic_doctor_tree">
+      <field name="name">doctor_clinic.doctor_tree</field>
+      <field name="model">pet_clinic.doctor</field>
       <field name="arch" type="xml">
-        <tree>
+        <tree string="Doctor">
           <field name="doctor_id" />
           <field name="name" />
           <field name="speciality" />
@@ -14,14 +14,15 @@
     </record>
 
     <!-- Doctor Form View -->
-    <record model="ir.ui.view" id="doctor_klinik_doctor_form">
-      <field name="name">doctor_klinik.doctor_form</field>
-      <field name="model">pet_klinik.doctor</field>
+    <record model="ir.ui.view" id="doctor_clinic_doctor_form">
+      <field name="name">doctor_clinic.doctor_form</field>
+      <field name="model">pet_clinic.doctor</field>
       <field name="arch" type="xml">
         <form string="Doctor">
           <sheet>
             <!-- Doctor Button Box -->
             <div class="oe_button_box" name="button_box">
+              <!-- Doctor Appointment Button -->
               <button name="open_doctor_appointment" class="oe_stat_button" type="object" icon="fa-calendar">
                 <field string="Janji" name="appointment_count" widget="statinfo" />
               </button>
@@ -58,9 +59,9 @@
     </record>
 
     <!-- Doctor Kanban View -->
-    <record id="doctor_klinik_doctor_kanban" model="ir.ui.view">
-      <field name="name">doctor_klinik.doctor_kanban</field>
-      <field name="model">pet_klinik.doctor</field>
+    <record id="doctor_clinic_doctor_kanban" model="ir.ui.view">
+      <field name="name">doctor_clinic.doctor_kanban</field>
+      <field name="model">pet_clinic.doctor</field>
       <field name="arch" type="xml">
         <kanban>
           <field name="id" />
@@ -71,9 +72,9 @@
           <field name="speciality" />
           <templates>
             <t t-name="kanban-box">
-              <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_pet_klinik_docotr_kanban">
+              <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_pet_clinic_docotr_kanban">
                 <t t-if="record.image.raw_value">
-                  <div class="o_kanban_image_fill_center d-none d-md-block" t-attf-style="background-image:url('#{kanban_image('pet_klinik.doctor', 'image', record.id.raw_value)}')" />
+                  <div class="o_kanban_image_fill_center d-none d-md-block" t-attf-style="background-image:url('#{kanban_image('pet_clinic.doctor', 'image', record.id.raw_value)}')" />
                 </t>
                 <t t-else="">
                   <img class="o_kanban_image" alt="Avatar" t-att-src="_s + '/base/static/img/avatar.png'" />
@@ -106,9 +107,9 @@
     </record>
 
     <!-- Doctor Search View -->
-    <record id="pet_klinik_doctor_search" model="ir.ui.view">
-      <field name="name">pet_klinik.doctor_search</field>
-      <field name="model">pet_klinik.doctor</field>
+    <record id="pet_clinic_doctor_search" model="ir.ui.view">
+      <field name="name">pet_clinic.doctor_search</field>
+      <field name="model">pet_clinic.doctor</field>
       <field name="arch" type="xml">
         <search string="Search Doctor">
           <field name="name" filter_domain="['|',('name', 'ilike', self),('doctor_id', 'ilike', self)]" />
@@ -117,23 +118,23 @@
           <field name="name" />
           <separator />
           <group expand="0" string="Group By">
-            <filter string="Spesialis" name="speciality" context="{'group_by':'speciality'}" />
+            <filter string="Speciality" name="speciality" context="{'group_by':'speciality'}" />
           </group>
         </search>
       </field>
     </record>
 
     <!-- Doctor Action Window -->
-    <record model="ir.actions.act_window" id="doctor_klinik_doctor_action_window">
+    <record model="ir.actions.act_window" id="doctor_clinic_doctor_action_window">
       <field name="name">doctor</field>
-      <field name="res_model">pet_klinik.doctor</field>
+      <field name="res_model">pet_clinic.doctor</field>
       <field name="view_mode">tree,form,kanban</field>
     </record>
 
     <!-- Menu Root -->
-    <menuitem name="Pet Klinik" id="pet_klinik.menu_root" />
+    <menuitem name="Pet Clinic" id="pet_clinic.root_menu" />
 
     <!-- Menu Doctor -->
-    <menuitem name="Doctor" id="pet_klinik.doctor" parent="pet_klinik.menu_root" action="doctor_klinik_doctor_action_window" />
+    <menuitem name="Doctor" id="pet_clinic.doctor" parent="pet_clinic.root_menu" action="doctor_clinic_doctor_action_window" />
   </data>
 </odoo>

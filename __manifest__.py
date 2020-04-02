@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "Pet Klinik",
+    'name': "Pet Clinic",
 
     'summary': """
-       Klinik Pet""",
+       Pet Clinic""",
 
     'description': """
         Long description of module's purpose

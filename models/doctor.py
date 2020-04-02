@@ -4,30 +4,32 @@ from odoo import models, fields, api, _
 
 
 class Doctor(models.Model):
-    _name = 'pet_klinik.doctor'
+    _name = 'pet_clinic.doctor'
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _rec_name = 'rec_name'
 
     doctor_id = fields.Char(string='ID', required=True, copy=False, readonly=True,
                             index=True, default=lambda self: _('New'))
-    name = fields.Char(string='Nama', required=True)
+    name = fields.Char(string='Name', required=True)
     rec_name = fields.Char(string='Recname',
                            compute='_compute_fields_rec_name')
     gender = fields.Selection([
-        ('laki-laki', 'Laki-laki'),
-        ('perempuan', 'Perempuan'),
-    ], default='laki-laki', string="Gender", required=True)
-    age = fields.Integer(string='Umur', required=True)
-    image = fields.Binary(string='Foto')
-    phone = fields.Char(string='No Telepon', required=True)
+        ('male', 'Male'),
+        ('female', 'Female'),
+    ], default='male', string="Gender", required=True)
+    age = fields.Integer(string='Age', required=True)
+    image = fields.Binary(string='Image')
+    phone = fields.Char(string='Phone', required=True)
     email = fields.Char(string='Email')
-    address = fields.Text(string='Alamat')
+    address = fields.Text(string='Address')
+
     appointment_count = fields.Integer(compute='compute_appointment_count')
+    patient_count = fields.Integer(compute='compute_patient_count')
 
     speciality = fields.Many2one(
-        'pet_klinik.doctor.speciality', string='Spesialis',  required=True)
+        'pet_clinic.doctor.speciality', string='Speciality',  required=True)
     speciality_name = fields.Char(related='speciality.name',
-                                  string='Spesialis')
+                                  string='Speciality')
 
     @api.depends('name', 'speciality_name')
     def _compute_fields_rec_name(self):
@@ -50,7 +52,7 @@ class Doctor(models.Model):
             'name': _('Appointments'),
             'domain': [('doctor', '=', self.id)],
             'view_type': 'form',
-            'res_model': 'pet_klinik.appointment',
+            'res_model': 'pet_clinic.appointment',
             'view_id': False,
             'view_mode': 'tree,form',
             'type': 'ir.actions.act_window',
@@ -59,11 +61,11 @@ class Doctor(models.Model):
     # Button Appointment Count
     def compute_appointment_count(self):
         for record in self:
-            record.appointment_count = self.env['pet_klinik.appointment'].search_count(
+            record.appointment_count = self.env['pet_clinic.appointment'].search_count(
                 [('doctor', '=', self.id)])
 
 
 class DoctorSpeciality(models.Model):
-    _name = 'pet_klinik.doctor.speciality'
+    _name = 'pet_clinic.doctor.speciality'
 
-    name = fields.Char(string='Nama', required=True)
+    name = fields.Char(string='Name', required=True)

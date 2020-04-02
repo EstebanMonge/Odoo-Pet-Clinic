@@ -2,9 +2,9 @@
   <data>
 
     <!-- Client Tree View -->
-    <record model="ir.ui.view" id="pet_klinik_client_tree">
-      <field name="name">pet_klinik.client_tree</field>
-      <field name="model">pet_klinik.client</field>
+    <record model="ir.ui.view" id="pet_clinic_client_tree">
+      <field name="name">pet_clinic.client_tree</field>
+      <field name="model">pet_clinic.client</field>
       <field name="arch" type="xml">
         <tree>
           <field name="client_id" />
@@ -16,19 +16,19 @@
     </record>
 
     <!-- Client Form View -->
-    <record model="ir.ui.view" id="pet_klinik_client_form">
-      <field name="name">pet_klinik.client_form</field>
-      <field name="model">pet_klinik.client</field>
+    <record model="ir.ui.view" id="pet_clinic_client_form">
+      <field name="name">pet_clinic.client_form</field>
+      <field name="model">pet_clinic.client</field>
       <field name="arch" type="xml">
         <form string="Client">
           <sheet>
             <!-- Client Button Box -->
             <div class="oe_button_box" name="button_box">
               <button name="open_client_pet" class="oe_stat_button" type="object" icon="fa-paw">
-                <field string="Binatang Peliharaan" name="pet_count" widget="statinfo" />
+                <field string="Pets" name="pet_count" widget="statinfo" />
               </button>
               <button name="open_client_appointment" class="oe_stat_button" type="object" icon="fa-calendar">
-                <field string="Janji" name="appointment_count" widget="statinfo" />
+                <field string="Appointments" name="appointment_count" widget="statinfo" />
               </button>
             </div>
             <div class="oe_title">
@@ -51,14 +51,9 @@
                 <field name="address" />
               </group>
             </group>
-            <notebook>
-              <page string="Pets">
-                <field name="pet" />
-              </page>
-              <page string="Appointments">
-                <field name="appointment" />
-              </page>
-            </notebook>
+            <group>
+              <field name="pet" domain="[('owner', '=', False)]" />
+            </group>
           </sheet>
           <div class="oe_chatter">
             <field name="message_follower_ids" widget="mail_followers" />
@@ -70,9 +65,9 @@
     </record>
 
     <!-- Client Kanban View -->
-    <record id="pet_klinik_client_kanban" model="ir.ui.view">
-      <field name="name">pet_klinik.client_kanban</field>
-      <field name="model">pet_klinik.client</field>
+    <record id="pet_clinic_client_kanban" model="ir.ui.view">
+      <field name="name">pet_clinic.client_kanban</field>
+      <field name="model">pet_clinic.client</field>
       <field name="arch" type="xml">
         <kanban>
           <field name="id" />
@@ -83,9 +78,9 @@
           <field name="address" />
           <templates>
             <t t-name="kanban-box">
-              <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_pet_klinik_pet_kanban">
+              <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_pet_clinic_pet_kanban">
                 <t t-if="record.image.raw_value">
-                  <div class="o_kanban_image_fill_left d-none d-md-block" t-attf-style="background-image:url('#{kanban_image('pet_klinik.client', 'image', record.id.raw_value)}')" />
+                  <div class="o_kanban_image_fill_left d-none d-md-block" t-attf-style="background-image:url('#{kanban_image('pet_clinic.client', 'image', record.id.raw_value)}')" />
                 </t>
                 <t t-else="">
                   <img class="o_kanban_image" alt="Avatar" t-att-src="_s + '/base/static/img/avatar.png'" />
@@ -118,17 +113,17 @@
     </record>
 
     <!-- Client Search View -->
-    <record id="pet_klinik_client_search" model="ir.ui.view">
-      <field name="name">pet_klinik.client_search</field>
-      <field name="model">pet_klinik.client</field>
+    <record id="pet_clinic_client_search" model="ir.ui.view">
+      <field name="name">pet_clinic.client_search</field>
+      <field name="model">pet_clinic.client</field>
       <field name="arch" type="xml">
         <search string="Search Client">
           <field name="name" filter_domain="['|',('name', 'ilike', self),('client_id', 'ilike', self)]" />
           <field name="client_id" />
           <field name="name" />
           <separator />
-          <filter string="Laki-laki" name="male" domain="[('gender', '=', 'laki-laki')]" />
-          <filter string="Perempuan" name="female" domain="[('gender', '=', 'perempuan')]" />
+          <filter string="Male" name="male" domain="[('gender', '=', 'male')]" />
+          <filter string="Female" name="female" domain="[('gender', '=', 'female')]" />
           <group expand="0" string="Group By">
             <filter string="Gender" name="gender" context="{'group_by':'gender'}" />
           </group>
@@ -137,19 +132,19 @@
     </record>
 
     <!-- Client Action Window -->
-    <record model="ir.actions.act_window" id="client_klinik_client_action_window">
+    <record model="ir.actions.act_window" id="client_clinic_client_action_window">
       <field name="name">Client</field>
-      <field name="res_model">pet_klinik.client</field>
+      <field name="res_model">pet_clinic.client</field>
       <field name="view_mode">tree,form,kanban</field>
     </record>
 
     <!-- Menu Root -->
-    <menuitem name="Pet Klinik" id="pet_klinik.menu_root" />
+    <menuitem name="Pet Clinic" id="pet_clinic.root_menu" />
 
     <!-- Menu Patient -->
-    <menuitem name="Patient" id="pet_klinik.patient" parent="pet_klinik.menu_root" />
+    <menuitem name="Patient" id="pet_clinic.patient" parent="pet_clinic.root_menu" />
 
     <!-- Menu Patient -> Client -->
-    <menuitem name="Client" id="pet_klinik.menu_client" parent="pet_klinik.patient" action="client_klinik_client_action_window" />
+    <menuitem name="Client" id="pet_clinic.menu_client" parent="pet_clinic.patient" action="client_clinic_client_action_window" />
   </data>
 </odoo>

@@ -1,11 +1,11 @@
 <odoo>
   <data>
     <!-- Appointment Tree View -->
-    <record model="ir.ui.view" id="pet_klinik_appointment_tree">
-      <field name="name">pet_klinik.appointment_tree</field>
-      <field name="model">pet_klinik.appointment</field>
+    <record model="ir.ui.view" id="pet_clinic_appointment_tree">
+      <field name="name">pet_clinic.appointment_tree</field>
+      <field name="model">pet_clinic.appointment</field>
       <field name="arch" type="xml">
-        <tree decoration-info="state == 'rancangan'" decoration-muted="state == 'dibatalkan'" decoration-success="state == 'selesai'" decoration-danger="state == 'sedang_diperiksa'">
+        <tree decoration-info="state == 'draft'" decoration-muted="state == 'canceled'" decoration-success="state == 'done'" decoration-danger="state == 'in_process'">
           <field name="appointment_id" />
           <field name="pet" />
           <field name="doctor" />
@@ -17,16 +17,16 @@
     </record>
 
     <!-- Appointment Form View -->
-    <record model="ir.ui.view" id="pet_klinik_appointment_form">
-      <field name="name">pet_klinik.appointment_form</field>
-      <field name="model">pet_klinik.appointment</field>
+    <record model="ir.ui.view" id="pet_clinic_appointment_form">
+      <field name="name">pet_clinic.appointment_form</field>
+      <field name="model">pet_clinic.appointment</field>
       <field name="arch" type="xml">
         <form string="Pet">
           <header>
-            <button name="action_check" type="object" string="Periksa" class="oe_highlight" states="rancangan" />
-            <button name="action_done" type="object" string="Selesai" class="oe_highlight" attrs="{'invisible': [('state','!=', 'sedang_diperiksa')]}" />
-            <button name="action_cancel" type="object" string="Batalkan" />
-            <field name="state" widget="statusbar" statusbar_visible="rancangan,sedang_diperiksa,selesai" />
+            <button name="action_check" type="object" string="Check" class="oe_highlight" states="draft" />
+            <button name="action_done" type="object" string="Done" class="oe_highlight" attrs="{'invisible': [('state','!=', 'in_process')]}" />
+            <button name="action_cancel" type="object" string="Cancel" />
+            <field name="state" widget="statusbar" statusbar_visible="draft,in_process,done" />
           </header>
           <sheet>
             <div class="oe_title">
@@ -46,6 +46,9 @@
                 <field name="time" />
               </group>
             </group>
+            <group>
+              <field name="description" />
+            </group>
           </sheet>
           <div class="oe_chatter">
             <field name="message_follower_ids" widget="mail_followers" />
@@ -57,9 +60,9 @@
     </record>
 
     <!-- Appointment Kanban View -->
-    <record id="pet_klinik_appointment_kanban" model="ir.ui.view">
-      <field name="name">pet_klinik.appointment_kanban</field>
-      <field name="model">pet_klinik.appointment</field>
+    <record id="pet_clinic_appointment_kanban" model="ir.ui.view">
+      <field name="name">pet_clinic.appointment_kanban</field>
+      <field name="model">pet_clinic.appointment</field>
       <field name="arch" type="xml">
         <kanban default_group_by="state" class="o_kanban_small_column">
           <field name="id" />
@@ -99,13 +102,13 @@
                 <div class="row">
                   <div class="col-6">
                     <span>
-                      Dokter
+                      Doctor
                       <field name="doctor_name" />
                     </span>
                   </div>
                   <div class="col-6">
                     <span class="float-right" style="font-size:16px;">
-                      <field name="state" widget="label_selection" options="{'classes': {'rancangan': 'info', 'sedang_diperiksa': 'warning', 'selesai': 'success', 'dibatalkan': 'danger'}}" />
+                      <field name="state" widget="label_selection" options="{'classes': {'draft': 'info', 'in_process': 'warning', 'done': 'success', 'canceled': 'danger'}}" />
                     </span>
                   </div>
                 </div>
@@ -117,11 +120,11 @@
     </record>
 
     <!-- Appointment Calendar View-->
-    <record id="pet_klinik_appointment_calendar" model="ir.ui.view">
-      <field name="name">pet_klinik.appointment_calendar</field>
-      <field name="model">pet_klinik.appointment</field>
+    <record id="pet_clinic_appointment_calendar" model="ir.ui.view">
+      <field name="name">pet_clinic.appointment_calendar</field>
+      <field name="model">pet_clinic.appointment</field>
       <field name="arch" type="xml">
-        <calendar string="Appointment Calendar" date_start="date" color="pet_id" mode="month" quick_add="True">
+        <calendar string="Appointment Calendar" date_start="date" color="pet" mode="month" quick_add="True">
           <field name="appointment_id" />
           <field name="pet" />
           <field name="doctor" />
@@ -131,52 +134,52 @@
 
 
     <!-- Appointment Graph View -->
-    <record id="pet_klinik_pet_graph" model="ir.ui.view">
-      <field name="name">pet_klinik.pet_graph</field>
-      <field name="model">pet_klinik.appointment</field>
+    <record id="pet_clinic_appointment_graph" model="ir.ui.view">
+      <field name="name">pet_clinic.pet_graph</field>
+      <field name="model">pet_clinic.appointment</field>
       <field name="arch" type="xml">
         <graph string="Appointment Graph" type="pie">
           <field name="date" />
-          <field name="doctor_name" type="measure" />
           <field name="date" type="measure" />
         </graph>
       </field>
     </record>
 
     <!-- Appointment Search View -->
-    <record id="pet_klinik_appointment_search" model="ir.ui.view">
-      <field name="name">pet_klinik.appointment_search</field>
-      <field name="model">pet_klinik.appointment</field>
+    <record id="pet_clinic_appointment_search" model="ir.ui.view">
+      <field name="name">pet_clinic.appointment_search</field>
+      <field name="model">pet_clinic.appointment</field>
       <field name="arch" type="xml">
         <search string="Search Appointment">
           <field name="appointment_id" filter_domain="[('appointment_id', 'ilike', self)]" />
           <field name="doctor_name" />
           <field name="date" />
           <separator />
-          <filter string="Hari ini" name="date_today" domain="[('date', '=', datetime.date.today().strftime('%Y-%m-%d'))]" />
-          <filter string="Rancangan" name="rancangan" domain="[('state', '=', 'rancangan')]" />
-          <filter string="Sedang Diperiksa" name="sedang_diperiksa" domain="[('state', '=', 'sedang_diperiksa')]" />
-          <filter string="Selesai" name="selesai" domain="[('state', '=', 'selesai')]" />
-          <filter string="Dibatalkan" name="dibatalkan" domain="[('state', '=', 'dibatalkan')]" />
+          <filter string="Today" name="date_today" domain="[('date', '=', datetime.date.today().strftime('%Y-%m-%d'))]" />
+          <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]" />
+          <filter string="In Process" name="in_process" domain="[('state', '=', 'in_process')]" />
+          <filter string="Done" name="done" domain="[('state', '=', 'done')]" />
+          <filter string="Canceled" name="canceled" domain="[('state', '=', 'canceled')]" />
           <group expand="0" string="Group By">
             <filter string="Status" name="state" context="{'group_by':'state'}" />
+            <filter string="Doctor" name="doctor_name" context="{'group_by':'doctor_name'}" />
           </group>
         </search>
       </field>
     </record>
 
     <!-- Appointment Action Window -->
-    <record model="ir.actions.act_window" id="pet_klinik_appointment_action_window">
+    <record model="ir.actions.act_window" id="pet_clinic_appointment_action_window">
       <field name="name">Appointment</field>
-      <field name="res_model">pet_klinik.appointment</field>
-      <field name="view_mode">tree,form,kanban,calendar,graph</field>
+      <field name="res_model">pet_clinic.appointment</field>
+      <field name="view_mode">kanban,tree,form,calendar,graph</field>
       <field name="context">{'search_default_date_today': 1}</field>
     </record>
 
     <!-- Menu Root -->
-    <menuitem name="Pet Klinik" id="pet_klinik.menu_root" />
+    <menuitem name="Pet Clinic" id="pet_clinic.root_menu" />
 
     <!-- Menu Appointment -->
-    <menuitem name="Appointment" id="pet_klinik.appointment" parent="pet_klinik.menu_root" action="pet_klinik_appointment_action_window" />
+    <menuitem name="Appointment" id="pet_clinic.appointment" parent="pet_clinic.root_menu" action="pet_clinic_appointment_action_window" />
   </data>
 </odoo>

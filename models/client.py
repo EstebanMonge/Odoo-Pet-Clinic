@@ -4,29 +4,28 @@ from odoo import models, fields, api, _
 
 
 class Client(models.Model):
-    _name = 'pet_klinik.client'
+    _name = 'pet_clinic.client'
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _rec_name = 'name'
 
     client_id = fields.Char(string='ID', required=True, copy=False, readonly=True,
                             index=True, default=lambda self: _('New'))
-    name = fields.Char(string="Nama", required=True)
+    name = fields.Char(string="Name", required=True)
     gender = fields.Selection([
-        ('laki-laki', 'Laki-laki'),
-        ('perempuan', 'Perempuan'),
-    ], default='laki-laki', string="Gender", required=True)
-    age = fields.Integer(string='Umur', required=True)
-    image = fields.Binary(string='Foto', attachment=True)
-    phone = fields.Char(string='No Telepon', required=True)
+        ('male', 'Male'),
+        ('female', 'Female'),
+    ], default='male', string="Gender", required=True)
+    age = fields.Integer(string='Age', required=True)
+    image = fields.Binary(string='Image', attachment=True)
+    phone = fields.Char(string='Phone', required=True)
     email = fields.Char(string='Email')
-    address = fields.Text(string='Alamat')
+    address = fields.Text(string='Address')
 
-    pet = fields.One2many('pet_klinik.pet', 'owner',
-                          string="Hewan Peliharaan")
+    # Pet
+    pet = fields.One2many('pet_clinic.pet', 'owner', string='Pet')
     pet_count = fields.Integer(compute='compute_pet_count')
 
-    appointment = fields.Many2many('pet_klinik.appointment', 'client',
-                                   string="Appointment")
+    # Appointment
     appointment_count = fields.Integer(compute='compute_appointment_count')
 
     @api.model
@@ -44,7 +43,7 @@ class Client(models.Model):
             'name': _('Pets'),
             'domain': [('owner', '=', self.id)],
             'view_type': 'form',
-            'res_model': 'pet_klinik.pet',
+            'res_model': 'pet_clinic.pet',
             'view_id': False,
             'view_mode': 'tree,form',
             'type': 'ir.actions.act_window',
@@ -53,7 +52,7 @@ class Client(models.Model):
 
     def compute_pet_count(self):
         for record in self:
-            record.pet_count = self.env['pet_klinik.pet'].search_count(
+            record.pet_count = self.env['pet_clinic.pet'].search_count(
                 [('owner', '=', self.id)])
 
     # Button Appointment Handle
@@ -61,17 +60,16 @@ class Client(models.Model):
     def open_client_appointment(self):
         return {
             'name': _('Appointments'),
-            'domain': [('client', '=', self.id)],
+            'domain': [('pet_owner_id', '=', self.id)],
             'view_type': 'form',
-            'res_model': 'pet_klinik.appointment',
+            'res_model': 'pet_clinic.appointment',
             'view_id': False,
             'view_mode': 'tree,form',
             'type': 'ir.actions.act_window',
         }
 
     # Button Appointment Count
-
     def compute_appointment_count(self):
         for record in self:
-            record.appointment_count = self.env['pet_klinik.appointment'].search_count(
-                [('client', '=', self.id)])
+            record.appointment_count = self.env['pet_clinic.appointment'].search_count(
+                [('pet_owner_id', '=', self.id)])
