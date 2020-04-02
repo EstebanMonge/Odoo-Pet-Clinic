@@ -1,8 +1,8 @@
 <odoo>
   <data>
     <!-- Doctor Tree View -->
-    <record model="ir.ui.view" id="doctor_clinic_doctor_tree">
-      <field name="name">doctor_clinic.doctor_tree</field>
+    <record model="ir.ui.view" id="pet_clinic_doctor_tree">
+      <field name="name">pet_clinic.doctor_tree</field>
       <field name="model">pet_clinic.doctor</field>
       <field name="arch" type="xml">
         <tree string="Doctor">
@@ -14,8 +14,8 @@
     </record>
 
     <!-- Doctor Form View -->
-    <record model="ir.ui.view" id="doctor_clinic_doctor_form">
-      <field name="name">doctor_clinic.doctor_form</field>
+    <record model="ir.ui.view" id="pet_clinic_doctor_form">
+      <field name="name">pet_clinic.doctor_form</field>
       <field name="model">pet_clinic.doctor</field>
       <field name="arch" type="xml">
         <form string="Doctor">
@@ -59,8 +59,8 @@
     </record>
 
     <!-- Doctor Kanban View -->
-    <record id="doctor_clinic_doctor_kanban" model="ir.ui.view">
-      <field name="name">doctor_clinic.doctor_kanban</field>
+    <record id="pet_clinic_doctor_kanban" model="ir.ui.view">
+      <field name="name">pet_clinic.doctor_kanban</field>
       <field name="model">pet_clinic.doctor</field>
       <field name="arch" type="xml">
         <kanban>

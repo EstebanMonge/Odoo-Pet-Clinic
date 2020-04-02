@@ -49,8 +49,8 @@
                 <field name="owner" />
               </group>
             </group>
-            <group>
-              <field name="description" />
+            <group string="Description">
+              <field name="description" nolabel="1" placeholder="This is Animal Note" />
             </group>
           </sheet>
           <div class="oe_chatter">
@@ -78,12 +78,9 @@
           <templates>
             <t t-name="kanban-box">
               <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_pet_clinic_pet_kanban">
-                <t t-if="record.image.raw_value">
-                  <div class="o_kanban_image_fill_left d-none d-md-block" t-attf-style="background-image:url('#{kanban_image('pet_clinic.pet', 'image', record.id.raw_value)}')" />
-                </t>
-                <t t-else="">
-                  <img class="o_kanban_image" alt="Avatar" t-att-src="_s + '/pet_clinic/static/avatar/pet_avatar.png'" />
-                </t>
+                <div class="o_kanban_image">
+                  <img t-att-src="kanban_image('product.template', 'image', record.id.raw_value)" alt="Product" />
+                </div>
                 <div class="oe_kanban_details">
                   <strong class="o_kanban_record_title">
                     <field name="name" />

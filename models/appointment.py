@@ -27,6 +27,7 @@ class Appointment(models.Model):
     pet = fields.Many2one(
         'pet_clinic.pet', required=True)
     pet_id = fields.Char(related='pet.pet_id', string='Pet ID')
+    pet_name = fields.Char(related='pet.name', string='Pet')
     pet_owner_id = fields.Integer(
         related='pet.owner_id')
     pet_owner = fields.Char(related='pet.owner_name', string='Owner')
@@ -35,6 +36,10 @@ class Appointment(models.Model):
     doctor = fields.Many2one(
         'pet_clinic.doctor', required=True)
     doctor_name = fields.Char(related='doctor.name', string='Doctor')
+
+    # # Service
+    # service = fields.Many2many(
+    #     'pet_clinic.service', 'appointment', string='Service')
 
     @api.model
     def create(self, vals):

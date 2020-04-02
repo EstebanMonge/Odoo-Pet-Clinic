@@ -28,7 +28,8 @@
         'views/client.xml',
         'views/pet.xml',
         'views/appointment.xml',
-        'views/doctor.xml'
+        'views/doctor.xml',
+        'views/product.xml'
     ],
     # only loaded in demonstration mode
     'demo': [

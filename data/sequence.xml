@@ -37,6 +37,16 @@
             <field eval="False" name="company_id" />
             <field name="padding">4</field>
         </record>
-
+        <!-- sequence service -->
+        <record id="seq_id_service" model="ir.sequence">
+            <field name="name">Service ID</field>
+            <field name="code">pet_service.seq</field>
+            <field name="prefix">PS/%(range_year)s/%(month)s/</field>
+            <field eval="1" name="number_next" />
+            <field eval="1" name="number_increment" />
+            <field eval="True" name="use_date_range" />
+            <field eval="False" name="company_id" />
+            <field name="padding">4</field>
+        </record>
     </data>
 </odoo>

@@ -46,8 +46,8 @@
                 <field name="time" />
               </group>
             </group>
-            <group>
-              <field name="description" />
+            <group string="Description">
+              <field name="description" nolabel="1" placeholder="This is Appointment Note" />
             </group>
           </sheet>
           <div class="oe_chatter">
