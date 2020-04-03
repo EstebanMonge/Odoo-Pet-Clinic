@@ -1,20 +1,21 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, _
-from datetime import date, datetime
-from odoo.addons.as_time.models import alsw
+from datetime import time
 
 
 class Appointment(models.Model):
     _name = 'pet_clinic.appointment'
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _rec_name = 'appointment_id'
+    _defaults = {
+        'date': lambda *a: time.strftime('%Y-%m-%d %H:%M:%S'),
+    }
 
     appointment_id = fields.Char(string='ID', required=True, copy=False, readonly=True,
                                  index=True, default=lambda self: _('New'))
-    date = fields.Date(
-        string='Date', required=True, default=date.today())
-    time = alsw.Time(string='Time', required=True)
+    date = fields.Datetime(
+        string='Date', required=True)
     state = fields.Selection([
         ('draft', 'Draft'),
         ('in_process', 'In Process'),
@@ -26,7 +27,8 @@ class Appointment(models.Model):
     # Pet
     pet = fields.Many2one(
         'pet_clinic.pet', required=True)
-    pet_id = fields.Char(related='pet.pet_id', string='Pet ID')
+    pet_rec_name = fields.Char(related='pet.rec_name', string='Pet Recname')
+    pet_id = fields.Char(related='pet.pet_id', string='Pet')
     pet_name = fields.Char(related='pet.name', string='Pet')
     pet_owner_id = fields.Integer(
         related='pet.owner_id')
@@ -36,10 +38,6 @@ class Appointment(models.Model):
     doctor = fields.Many2one(
         'pet_clinic.doctor', required=True)
     doctor_name = fields.Char(related='doctor.name', string='Doctor')
-
-    # # Service
-    # service = fields.Many2many(
-    #     'pet_clinic.service', 'appointment', string='Service')
 
     @api.model
     def create(self, vals):

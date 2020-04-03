@@ -21,6 +21,9 @@
       <field name="model">pet_clinic.client</field>
       <field name="arch" type="xml">
         <form string="Client">
+          <header>
+            <button name="%(pet_clinic.create_pet_wizard)d" string="Create Pet" type="action" class="oe_highlight" context="{'default_owner': active_id}" />
+          </header>
           <sheet>
             <!-- Client Button Box -->
             <div class="oe_button_box" name="button_box">
@@ -52,7 +55,7 @@
               </group>
             </group>
             <group>
-              <field name="pet" domain="[('owner', '=', False)]" />
+              <field name="pet" widget="many2many_kanban" domain="[('owner', '=', False)]" />
             </group>
           </sheet>
           <div class="oe_chatter">
@@ -139,8 +142,8 @@
     </record>
 
     <!-- Menu Root -->
-    <menuitem name="Pet Clinic" id="pet_clinic.root_menu" />
-
+    <menuitem name="Pet Clinic" id="pet_clinic.root_menu" web_icon="pet_clinic,static/description/icon.png" />
+    />
     <!-- Menu Patient -->
     <menuitem name="Patient" id="pet_clinic.patient" parent="pet_clinic.root_menu" />
 

@@ -25,11 +25,14 @@
     'data': [
         'security/ir.model.access.csv',
         'data/sequence.xml',
+        'wizards/views/create_visitation.xml',
+        'wizards/views/create_pet.xml',
         'views/client.xml',
         'views/pet.xml',
         'views/appointment.xml',
+        'views/visitation.xml',
         'views/doctor.xml',
-        'views/product.xml'
+        'views/item.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

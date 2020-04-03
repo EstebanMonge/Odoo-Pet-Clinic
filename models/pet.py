@@ -17,25 +17,25 @@ class Pet(models.Model):
         ('male', 'Male'),
         ('female', 'Female'),
     ], default='male', string="Gender", required=True)
-    age = fields.Char(string='Age', required=True)
+    age = fields.Char(string='Age')
     image = fields.Binary(string='Image')
     description = fields.Text(string='Description')
 
     # Pet -> Type
     pet_type = fields.Many2one('pet_clinic.pet.type',
-                               string='Type', required=True)
+                               string='Species')
     pet_type_name = fields.Char(related='pet_type.name',
-                                string='Type')
+                                string='Species')
 
     # Pet -> Breed
     pet_breed = fields.Many2one('pet_clinic.pet.breed', domain="[('pet_type','=',pet_type)]",
-                                string='Breed', required=True)
+                                string='Breed')
     pet_breed_name = fields.Char(related='pet_breed.name',
                                  string='Breed')
 
     # Owner
     owner = fields.Many2one(
-        'pet_clinic.client', string='Owner', required=True, store=True, readonly=False)
+        'pet_clinic.client', string='Owner', store=True, readonly=False)
     owner_id = fields.Integer(
         related='owner.id', string='Pet Owner ID')
     owner_name = fields.Char(
@@ -47,8 +47,16 @@ class Pet(models.Model):
     @api.depends('name', 'pet_type_name', 'pet_breed_name')
     def _compute_fields_rec_name(self):
         for pet in self:
-            pet.rec_name = '{} - {} {}'.format(pet.name,
-                                               pet.pet_type_name, pet.pet_breed_name)
+            if(pet.pet_type_name == False and pet.pet_breed_name == False):
+                pet.rec_name = '{}'.format(pet.name)
+            elif(pet.pet_breed_name == False):
+                pet.rec_name = '{} - {}'.format(pet.name,
+                                                pet.pet_type_name)
+            elif(pet.pet_type_name == False):
+                pet.rec_name = '{}'.format(pet.name)
+            else:
+                pet.rec_name = '{} - {} {}'.format(pet.name,
+                                                   pet.pet_type_name, pet.pet_breed_name)
 
     @api.model
     def create(self, vals):

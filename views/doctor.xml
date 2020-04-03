@@ -132,8 +132,8 @@
     </record>
 
     <!-- Menu Root -->
-    <menuitem name="Pet Clinic" id="pet_clinic.root_menu" />
-
+    <menuitem name="Pet Clinic" id="pet_clinic.root_menu" web_icon="pet_clinic,static/description/icon.png" />
+    />
     <!-- Menu Doctor -->
     <menuitem name="Doctor" id="pet_clinic.doctor" parent="pet_clinic.root_menu" action="doctor_clinic_doctor_action_window" />
   </data>

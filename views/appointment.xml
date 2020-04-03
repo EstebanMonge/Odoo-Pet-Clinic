@@ -10,7 +10,6 @@
           <field name="pet" />
           <field name="doctor" />
           <field name="date" />
-          <field name="time" />
           <field name="state" />
         </tree>
       </field>
@@ -23,6 +22,7 @@
       <field name="arch" type="xml">
         <form string="Pet">
           <header>
+            <button name="%(pet_clinic.create_visitation_wizard)d" string="Create Visitation" type="action" class="oe_highlight" context="{'default_appointment': active_id}" />
             <button name="action_check" type="object" string="Check" class="oe_highlight" states="draft" />
             <button name="action_done" type="object" string="Done" class="oe_highlight" attrs="{'invisible': [('state','!=', 'in_process')]}" />
             <button name="action_cancel" type="object" string="Cancel" />
@@ -43,7 +43,6 @@
               <group>
                 <field name="doctor" />
                 <field name="date" />
-                <field name="time" />
               </group>
             </group>
             <group string="Description">
@@ -89,14 +88,10 @@
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-6">
+                  <div class="col-12">
                     <span>
                       <field name="pet" />
                     </span>
-                  </div>
-                  <div class="col-6  text-right">
-                    <i class="fa fa-clock-o" role="img" aria-label="Time" title="Time" />
-                    <field name="time" />
                   </div>
                 </div>
                 <div class="row">
@@ -124,7 +119,7 @@
       <field name="name">pet_clinic.appointment_calendar</field>
       <field name="model">pet_clinic.appointment</field>
       <field name="arch" type="xml">
-        <calendar string="Appointment Calendar" date_start="date" color="pet" mode="month" quick_add="True">
+        <calendar string="Appointment Calendar" date_start="date" color="pet" mode="month" quick_add="False">
           <field name="appointment_id" />
           <field name="pet" />
           <field name="doctor" />
@@ -172,13 +167,13 @@
     <record model="ir.actions.act_window" id="pet_clinic_appointment_action_window">
       <field name="name">Appointment</field>
       <field name="res_model">pet_clinic.appointment</field>
-      <field name="view_mode">kanban,tree,form,calendar,graph</field>
+      <field name="view_mode">calendar,kanban,tree,form,graph</field>
       <field name="context">{'search_default_date_today': 1}</field>
     </record>
 
     <!-- Menu Root -->
-    <menuitem name="Pet Clinic" id="pet_clinic.root_menu" />
-
+    <menuitem name="Pet Clinic" id="pet_clinic.root_menu" web_icon="pet_clinic,static/description/icon.png" />
+    />
     <!-- Menu Appointment -->
     <menuitem name="Appointment" id="pet_clinic.appointment" parent="pet_clinic.root_menu" action="pet_clinic_appointment_action_window" />
   </data>
