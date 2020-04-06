@@ -103,8 +103,9 @@
             <field name="arch" type="xml">
                 <search string="Search Item">
                     <field name="name" filter_domain="['|',('name', 'ilike', self),('internal_reference', 'ilike', self)]" />
+                    <separator />
                     <filter string="Services" name="services" domain="[('item_type','=','service')]" />
-                    <filter string="Medicine" name="medicine" domain="[('item_type', '=', 'medicine')]" />
+                    <filter string="Products" name="product" domain="[('item_type', '=', 'product')]" />
                     <filter string="Available Items" name="amount" domain="[('amount','&gt;',0)]" />
                     <separator />
                     <group expand="0" string="Group By">

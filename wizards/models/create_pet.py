@@ -21,11 +21,8 @@ class CreatePet(models.TransientModel):
             'name': self.name,
             'gender': self.gender
         }
-        # adding a message to the chatter from code
-        # https://www.youtube.com/watch?v=J3MvgwHnR0A&list=PLqRRLx0cl0hoJhjFWkFYowveq2Zn55dhM&index=48
         self.owner.message_post(
             body="Your New Pet Has Been Added", subject="New Pet")
-        # creating pets from the code
         new_pet = self.env['pet_clinic.pet'].create(vals)
         context = dict(self.env.context)
         context['form_view_initial_mode'] = 'edit'

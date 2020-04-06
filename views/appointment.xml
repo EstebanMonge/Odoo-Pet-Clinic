@@ -5,7 +5,7 @@
       <field name="name">pet_clinic.appointment_tree</field>
       <field name="model">pet_clinic.appointment</field>
       <field name="arch" type="xml">
-        <tree decoration-info="state == 'draft'" decoration-muted="state == 'canceled'" decoration-success="state == 'done'" decoration-danger="state == 'in_process'">
+        <tree decoration-info="state == 'draft'" decoration-muted="state == 'canceled'" decoration-success="state == 'confirmed'">
           <field name="appointment_id" />
           <field name="pet" />
           <field name="doctor" />
@@ -22,11 +22,10 @@
       <field name="arch" type="xml">
         <form string="Pet">
           <header>
-            <button name="%(pet_clinic.create_visitation_wizard)d" string="Create Visitation" type="action" class="oe_highlight" context="{'default_appointment': active_id}" />
-            <button name="action_check" type="object" string="Check" class="oe_highlight" states="draft" />
-            <button name="action_done" type="object" string="Done" class="oe_highlight" attrs="{'invisible': [('state','!=', 'in_process')]}" />
+            <button name="%(pet_clinic.create_visitation_wizard)d" string="Create Visitation" type="action" class="oe_highlight" context="{'default_appointment': active_id}" attrs="{'invisible': [('state','=', 'canceled')]}" />
+            <button name="action_confirm" type="object" string="Confirm" class="oe_highlight" states="draft" />
             <button name="action_cancel" type="object" string="Cancel" />
-            <field name="state" widget="statusbar" statusbar_visible="draft,in_process,done" />
+            <field name="state" widget="statusbar" statusbar_visible="draft,confirmed" />
           </header>
           <sheet>
             <div class="oe_title">
@@ -43,7 +42,6 @@
               <group>
                 <field name="doctor" />
                 <field name="date" />
-                <field name="appointment_sequence" />
               </group>
             </group>
             <group string="Description">
@@ -104,7 +102,7 @@
                   </div>
                   <div class="col-6">
                     <span class="float-right" style="font-size:16px;">
-                      <field name="state" widget="label_selection" options="{'classes': {'draft': 'info', 'in_process': 'warning', 'done': 'success', 'canceled': 'danger'}}" />
+                      <field name="state" widget="label_selection" options="{'classes': {'draft': 'info', 'confirmed': 'success', 'canceled': 'danger'}}" />
                     </span>
                   </div>
                 </div>
@@ -153,8 +151,7 @@
           <separator />
           <filter string="Today" name="date_today" domain="[('date', '&gt;=', datetime.datetime.now().strftime('%Y-%m-%d 00:00:00')),('date', '&lt;=',datetime.datetime.now().strftime('%Y-%m-%d 23:23:59'))]" />
           <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]" />
-          <filter string="In Process" name="in_process" domain="[('state', '=', 'in_process')]" />
-          <filter string="Done" name="done" domain="[('state', '=', 'done')]" />
+          <filter string="Confirmed" name="confirmed" domain="[('state', '=', 'confirmed')]" />
           <filter string="Canceled" name="canceled" domain="[('state', '=', 'canceled')]" />
           <group expand="0" string="Group By">
             <filter string="Status" name="state" context="{'group_by':'state'}" />

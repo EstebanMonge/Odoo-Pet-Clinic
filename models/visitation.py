@@ -7,25 +7,12 @@ class Visitation(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _rec_name = 'visitation_id'
     _defaults = {
-        'date_end': lambda *a: time.strftime('%Y-%m-%d %H:%M:%S')
+        'date': lambda *a: time.strftime('%Y-%m-%d %H:%M:%S')
     }
-
-    # Appointment
-    appointment = fields.Many2one(
-        'pet_clinic.appointment', string='Appointment ID', required=True)
-    appointment_pet_rec_name = fields.Char(
-        related='appointment.pet_rec_name', string='Pet')
-    appointment_pet_owner = fields.Char(
-        related='appointment.pet_owner', string='Owner')
-    appointment_doctor_name = fields.Char(
-        related='appointment.doctor_name', string='Doctor')
 
     visitation_id = fields.Char(string='ID', required=True, copy=False, readonly=True,
                                 index=True, default=lambda self: _('New'))
-    date_start = fields.Datetime(
-        string='Date Start', store=True)
-    date_end = fields.Datetime(
-        string='Date End')
+    date = fields.Datetime(string='Date Start', required=True)
     state = fields.Selection([
         ('draft', 'Draft'),
         ('in_process', 'In Process'),
@@ -33,6 +20,21 @@ class Visitation(models.Model):
         ('canceled', 'canceled'),
     ], string='Status', default='draft')
     description = fields.Text(string='Description')
+
+    # Pet
+    pet = fields.Many2one(
+        'pet_clinic.pet', required=True)
+    pet_rec_name = fields.Char(related='pet.rec_name', string='Pet Recname')
+    pet_id = fields.Char(related='pet.pet_id', string='Pet')
+    pet_name = fields.Char(related='pet.name', string='Pet')
+    pet_owner_id = fields.Integer(
+        related='pet.owner_id')
+    pet_owner = fields.Char(related='pet.owner_name', string='Owner')
+
+    # Doctor
+    doctor = fields.Many2one(
+        'pet_clinic.doctor', required=True)
+    doctor_name = fields.Char(related='doctor.name', string='Doctor')
 
     @api.model
     def create(self, vals):
@@ -48,8 +50,6 @@ class Visitation(models.Model):
 
     def action_done(self):
         for rec in self:
-            rec.state = 'done'
-        for rec in self.appointment:
             rec.state = 'done'
 
     def action_cancel(self):

@@ -8,7 +8,7 @@
             <form string="Create Visitation">
                 <group>
                     <field name="appointment" />
-                    <field name="date_start" />
+                    <field name="date" />
                 </group>
                 <footer>
                     <button name="create_visitation" string="Create" type="object" class="btn-primary" />

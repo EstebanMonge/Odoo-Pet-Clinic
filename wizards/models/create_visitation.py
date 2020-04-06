@@ -9,19 +9,26 @@ class CreateVisitation(models.TransientModel):
 
     appointment = fields.Many2one(
         'pet_clinic.appointment', string="Appointment", required=True)
-    date_start = fields.Datetime(
-        related='appointment.date', string="Date Start")
+    appointment_date = fields.Datetime(
+        related='appointment.date', string='Date')
+    _defaults = {
+        'date': appointment_date
+    }
+    doctor = fields.Many2one(
+        'pet_clinic.doctor', required=True)
+    date = fields.Datetime(string='Date', required=True)
 
-    def action_check(self):
+    def action_confirm(self):
         for rec in self.appointment:
-            rec.state = 'in_process'
+            rec.state = 'confirmed'
 
     def create_visitation(self):
         vals = {
             'appointment': self.appointment.id,
-            'date_start': self.date_start
+            'date': self.date,
+            'doctor': self.doctor
         }
-        self.action_check()
+        self.action_confirm()
         self.appointment.message_post(
             body="new visitation Created", subject="visitation Creation")
         # creating visitations from the code

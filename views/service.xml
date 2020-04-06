@@ -1,25 +1,25 @@
 <odoo>
     <data>
-        <!-- Appointment Tree View -->
-        <record model="ir.ui.view" id="pet_clinic_appointment_tree">
-            <field name="name">pet_clinic.appointment_tree</field>
-            <field name="model">pet_clinic.appointment</field>
+        <!-- Service Tree View -->
+        <record model="ir.ui.view" id="pet_clinic_service_tree">
+            <field name="name">pet_clinic.service_tree</field>
+            <field name="model">pet_clinic.service</field>
             <field name="arch" type="xml">
                 <tree decoration-info="state == 'draft'" decoration-muted="state == 'canceled'" decoration-success="state == 'done'" decoration-danger="state == 'in_process'">
-                    <field name="appointment_id" />
-                    <field name="pet" />
-                    <field name="doctor" />
-                    <field name="date" />
-                    <field name="time" />
+                    <field name="service_id" />
+                    <field name="visitation_pet_name" />
+                    <field name="visitation_doctor_name" />
+                    <field name="date_start" />
+                    <field name="date_end" />
                     <field name="state" />
                 </tree>
             </field>
         </record>
 
-        <!-- Appointment Form View -->
-        <record model="ir.ui.view" id="pet_clinic_appointment_form">
-            <field name="name">pet_clinic.appointment_form</field>
-            <field name="model">pet_clinic.appointment</field>
+        <!-- Service Form View -->
+        <record model="ir.ui.view" id="pet_clinic_service_form">
+            <field name="name">pet_clinic.service_form</field>
+            <field name="model">pet_clinic.service</field>
             <field name="arch" type="xml">
                 <form string="Pet">
                     <header>
@@ -31,23 +31,21 @@
                     <sheet>
                         <div class="oe_title">
                             <h1>
-                                <field name="appointment_id" />
+                                <field name="service_id" />
                             </h1>
                         </div>
-                        <group name="data">
+                        <group>
                             <group>
-                                <field name="pet_id" />
-                                <field name="pet" />
-                                <field name="pet_owner" />
+                                <field name="visitation_pet_name" />
+                                <field name="visitation_doctor_name" />
                             </group>
                             <group>
-                                <field name="doctor" />
-                                <field name="date" />
-                                <field name="time" />
+                                <field name="date_start" />
+                                <field name="date_end" />
                             </group>
                         </group>
                         <group string="Description">
-                            <field name="description" nolabel="1" placeholder="This is Appointment Note" />
+                            <field name="description" nolabel="1" placeholder="This is Service Note" />
                         </group>
                     </sheet>
                     <div class="oe_chatter">
@@ -59,17 +57,18 @@
             </field>
         </record>
 
-        <!-- Appointment Kanban View -->
-        <record id="pet_clinic_appointment_kanban" model="ir.ui.view">
-            <field name="name">pet_clinic.appointment_kanban</field>
-            <field name="model">pet_clinic.appointment</field>
+        <!-- Service Kanban View -->
+        <record id="pet_clinic_service_kanban" model="ir.ui.view">
+            <field name="name">pet_clinic.service_kanban</field>
+            <field name="model">pet_clinic.service</field>
             <field name="arch" type="xml">
                 <kanban default_group_by="state" class="o_kanban_small_column">
                     <field name="id" />
-                    <field name="appointment_id" />
-                    <field name="doctor" />
-                    <field name="pet" />
-                    <field name="date" />
+                    <field name="service_id" />
+                    <field name="visitation_pet_name" />
+                    <field name="visitation_doctor_name" />
+                    <field name="date_start" />
+                    <field name="date_end" />
                     <templates>
                         <t t-name="kanban-box">
                             <div t-attf-class="oe_kanban_global_click">
@@ -77,33 +76,35 @@
                                     <div class="col-6">
                                         <strong>
                                             <span>
-                                                <field name="appointment_id" />
+                                                <field name="service_id" />
                                             </span>
                                         </strong>
                                     </div>
                                     <div class="col-6 text-right">
-                                        <strong>
-                                            <i class="fa fa-calendar" role="img" aria-label="Date" title="Date" />
-                                            <field name="date" />
-                                        </strong>
+                                        <i>
+                                            <i class="fa fa-calendar" role="img" aria-label="Start" title="Start" />
+                                            <field name="date_start" />
+                                        </i>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-6">
                                         <span>
-                                            <field name="pet" />
+                                            <field name="visitation_pet_name" />
                                         </span>
                                     </div>
                                     <div class="col-6  text-right">
-                                        <i class="fa fa-clock-o" role="img" aria-label="Time" title="Time" />
-                                        <field name="time" />
+                                        <i>
+                                            <i class="fa fa-calendar-check-o" role="img" aria-label="End" title="End" />
+                                            <field name="date_end" />
+                                        </i>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-6">
                                         <span>
                                             Doctor
-                                            <field name="doctor_name" />
+                                            <field name="visitation_doctor_name" />
                                         </span>
                                     </div>
                                     <div class="col-6">
@@ -119,59 +120,59 @@
             </field>
         </record>
 
-        <!-- Appointment Calendar View-->
-        <record id="pet_clinic_appointment_calendar" model="ir.ui.view">
-            <field name="name">pet_clinic.appointment_calendar</field>
-            <field name="model">pet_clinic.appointment</field>
+        <!-- Service Calendar View-->
+        <record id="pet_clinic_service_calendar" model="ir.ui.view">
+            <field name="name">pet_clinic.service_calendar</field>
+            <field name="model">pet_clinic.service</field>
             <field name="arch" type="xml">
-                <calendar string="Appointment Calendar" date_start="date" color="pet" mode="month" quick_add="True">
-                    <field name="appointment_id" />
-                    <field name="pet" />
-                    <field name="doctor" />
+                <calendar string="Service Calendar" date_start="date_start" color="visitation_pet_name" mode="month" quick_add="True">
+                    <field name="service_id" />
+                    <field name="visitation_pet_name" />
+                    <field name="visitation_doctor_name" />
                 </calendar>
             </field>
         </record>
 
 
-        <!-- Appointment Graph View -->
-        <record id="pet_clinic_appointment_graph" model="ir.ui.view">
+        <!-- Service Graph View -->
+        <record id="pet_clinic_service_graph" model="ir.ui.view">
             <field name="name">pet_clinic.pet_graph</field>
-            <field name="model">pet_clinic.appointment</field>
+            <field name="model">pet_clinic.service</field>
             <field name="arch" type="xml">
-                <graph string="Appointment Graph" type="pie">
-                    <field name="date" />
-                    <field name="date" type="measure" />
+                <graph string="Service Graph" type="pie">
+                    <field name="date_start" />
+                    <field name="date_start" type="measure" />
                 </graph>
             </field>
         </record>
 
-        <!-- Appointment Search View -->
-        <record id="pet_clinic_appointment_search" model="ir.ui.view">
-            <field name="name">pet_clinic.appointment_search</field>
-            <field name="model">pet_clinic.appointment</field>
+        <!-- Service Search View -->
+        <record id="pet_clinic_service_search" model="ir.ui.view">
+            <field name="name">pet_clinic.service_search</field>
+            <field name="model">pet_clinic.service</field>
             <field name="arch" type="xml">
-                <search string="Search Appointment">
-                    <field name="appointment_id" filter_domain="[('appointment_id', 'ilike', self)]" />
-                    <field name="doctor_name" />
-                    <field name="date" />
+                <search string="Search Service">
+                    <field name="service_id" filter_domain="[('service_id', 'ilike', self)]" />
+                    <field name="visitation_doctor_name" />
                     <separator />
-                    <filter string="Today" name="date_today" domain="[('date', '=', datetime.date.today().strftime('%Y-%m-%d'))]" />
+                    <filter string="Today" name="date_today" domain="[('date_start', '&gt;=', datetime.datetime.now().strftime('%Y-%m-%d 00:00:00')),('date_start', '&lt;=',datetime.datetime.now().strftime('%Y-%m-%d 23:23:59'))]" />
                     <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]" />
                     <filter string="In Process" name="in_process" domain="[('state', '=', 'in_process')]" />
                     <filter string="Done" name="done" domain="[('state', '=', 'done')]" />
                     <filter string="Canceled" name="canceled" domain="[('state', '=', 'canceled')]" />
                     <group expand="0" string="Group By">
                         <filter string="Status" name="state" context="{'group_by':'state'}" />
-                        <filter string="Doctor" name="doctor_name" context="{'group_by':'doctor_name'}" />
+                        <filter string="Status" name="state" context="{'group_by':'service_name'}" />
+                        <filter string="Doctor" name="doctor_name" context="{'group_by':'visitation_doctor_name'}" />
                     </group>
                 </search>
             </field>
         </record>
 
-        <!-- Appointment Action Window -->
-        <record model="ir.actions.act_window" id="pet_clinic_appointment_action_window">
-            <field name="name">Appointment</field>
-            <field name="res_model">pet_clinic.appointment</field>
+        <!-- Service Action Window -->
+        <record model="ir.actions.act_window" id="pet_clinic_service_action_window">
+            <field name="name">Service</field>
+            <field name="res_model">pet_clinic.service</field>
             <field name="view_mode">kanban,tree,form,calendar,graph</field>
             <field name="context">{'search_default_date_today': 1}</field>
         </record>
@@ -179,7 +180,7 @@
         <!-- Menu Root -->
         <menuitem name="Pet Clinic" id="pet_clinic.root_menu" />
 
-        <!-- Menu Appointment -->
-        <menuitem name="Appointment" id="pet_clinic.appointment" parent="pet_clinic.root_menu" action="pet_clinic_appointment_action_window" />
+        <!-- Menu Service -->
+        <menuitem name="Service" id="pet_clinic.service" parent="pet_clinic.root_menu" action="pet_clinic_service_action_window" />
     </data>
 </odoo>

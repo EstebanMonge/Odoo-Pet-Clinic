@@ -5,18 +5,20 @@ from datetime import time
 class Service(models.Model):
     _name = 'pet_clinic.service'
     _inherit = ['mail.thread', 'mail.activity.mixin']
-    _rec_name = 'service_id'
+    _rec_name = 'rec_name'
     _defaults = {
         'date_start': lambda *a: time.strftime('%Y-%m-%d %H:%M:%S'),
-        'date_end': lambda *a: time.strftime('%Y-%m-%d %H:%M:%S'),
+        'date_end': lambda *a: time.strftime('%Y-%m-%d %H:%M:%S')
     }
 
     service_id = fields.Char(string='ID', required=True, copy=False, readonly=True,
                              index=True, default=lambda self: _('New'))
+    rec_name = fields.Char(string='Recname',
+                           compute='_compute_fields_rec_name')
     date_start = fields.Datetime(
         string='Date Start', required=True)
     date_end = fields.Datetime(
-        string='Date End', required=True)
+        string='Date End')
     state = fields.Selection([
         ('draft', 'Draft'),
         ('in_process', 'In Process'),
@@ -26,18 +28,17 @@ class Service(models.Model):
     description = fields.Text(string='Description')
 
     # Item
-    service_name = fields.Many2one(
+    item_service = fields.Many2one(
         'pet_clinic.item', string='Service', required=True, domain="[('item_type', '=', 'service')]")
+    service_name = fields.Char(related='item_service.name')
 
-    # Appointment
-    appointment = fields.Many2one(
-        'pet_clinic.appointment', string='Appointment ID')
-    appointment_pet_name = fields.Char(
-        related='appointment.pet_name', string='Pet')
-    appointment_pet_owner = fields.Char(
-        related='appointment.pet_owner', string='Owner')
-    appointment_doctor_name = fields.Char(
-        related='appointment.doctor_name', string='Doctor')
+    # Visitation
+    visitation = fields.Many2one(
+        'pet_clinic.visitation', string='visitation ID', required=True)
+    visitation_pet_name = fields.Char(
+        related='visitation.pet_name', string='Pet')
+    visitation_doctor_name = fields.Char(
+        related='visitation.doctor_name', string='Doctor')
 
     @api.model
     def create(self, vals):
@@ -46,6 +47,12 @@ class Service(models.Model):
                 'pet_service.seq') or _('New')
         result = super(Service, self).create(vals)
         return result
+
+    @api.depends('visitation_pet_name', 'service_name')
+    def _compute_fields_rec_name(self):
+        for rec in self:
+            rec.rec_name = '{} - {}'.format(rec.visitation_pet_name,
+                                            rec.service_name)
 
     def action_check(self):
         for rec in self:
