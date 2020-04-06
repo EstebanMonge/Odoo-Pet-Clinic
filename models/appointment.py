@@ -39,6 +39,10 @@ class Appointment(models.Model):
         'pet_clinic.doctor', required=True)
     doctor_name = fields.Char(related='doctor.name', string='Doctor')
 
+    appointment_sequence = fields.Many2one(
+        'pet_clinic.appointment.sequence')
+    apid = fields.Integer(related='appointment_sequence.id')
+
     @api.model
     def create(self, vals):
         if vals.get('appointment_id', _('New')) == _('New'):
@@ -58,3 +62,10 @@ class Appointment(models.Model):
     def action_cancel(self):
         for rec in self:
             rec.state = 'canceled'
+
+
+class AppointmenSequence(models.Model):
+    _name = 'pet_clinic.appointment.sequence'
+
+    appointment_date = fields.Datetime()
+    number = fields.Integer(default=1, store=True)

@@ -43,6 +43,7 @@
               <group>
                 <field name="doctor" />
                 <field name="date" />
+                <field name="appointment_sequence" />
               </group>
             </group>
             <group string="Description">
@@ -150,7 +151,7 @@
           <field name="doctor_name" />
           <field name="date" />
           <separator />
-          <filter string="Today" name="date_today" domain="[('date', '=', datetime.date.today().strftime('%Y-%m-%d'))]" />
+          <filter string="Today" name="date_today" domain="[('date', '&gt;=', datetime.datetime.now().strftime('%Y-%m-%d 00:00:00')),('date', '&lt;=',datetime.datetime.now().strftime('%Y-%m-%d 23:23:59'))]" />
           <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]" />
           <filter string="In Process" name="in_process" domain="[('state', '=', 'in_process')]" />
           <filter string="Done" name="done" domain="[('state', '=', 'done')]" />

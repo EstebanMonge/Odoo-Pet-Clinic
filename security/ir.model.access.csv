@@ -4,6 +4,7 @@ access_pet_clinic_pet,pet_clinic.pet,model_pet_clinic_pet,,1,1,1,1
 access_pet_clinic_pet_type,pet_clinic.pet.type,model_pet_clinic_pet_type,,1,1,1,1
 access_pet_clinic_pet_breed,pet_clinic.pet.breed,model_pet_clinic_pet_breed,,1,1,1,1
 access_pet_clinic_appointment,pet_clinic.appointment,model_pet_clinic_appointment,,1,1,1,1
+access_pet_clinic_appointment_sequence,pet_clinic.appointment.sequence,model_pet_clinic_appointment_sequence,,1,1,1,1
 access_pet_clinic_visitation,pet_clinic.visitation,model_pet_clinic_visitation,,1,1,1,1
 access_pet_clinic_doctor,pet_clinic.doctor,model_pet_clinic_doctor,,1,1,1,1
 access_pet_clinic_doctor_speciality,pet_clinic.doctor.speciality,model_pet_clinic_doctor_speciality,,1,1,1,1

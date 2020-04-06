@@ -19,7 +19,7 @@ class Doctor(models.Model):
     ], default='male', string="Gender", required=True)
     age = fields.Integer(string='Age', required=True)
     image = fields.Binary(string='Image')
-    phone = fields.Char(string='Phone', required=True)
+    phone = fields.Char(string='Phone')
     email = fields.Char(string='Email')
     address = fields.Text(string='Address')
 
