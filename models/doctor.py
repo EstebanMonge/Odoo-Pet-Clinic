@@ -6,13 +6,11 @@ from odoo import models, fields, api, _
 class Doctor(models.Model):
     _name = 'pet_clinic.doctor'
     _inherit = ['mail.thread', 'mail.activity.mixin']
-    _rec_name = 'rec_name'
+    _rec_name = 'name'
 
     doctor_id = fields.Char(string='ID', required=True, copy=False, readonly=True,
                             index=True, default=lambda self: _('New'))
     name = fields.Char(string='Name', required=True)
-    rec_name = fields.Char(string='Recname',
-                           compute='_compute_fields_rec_name')
     gender = fields.Selection([
         ('male', 'Male'),
         ('female', 'Female'),
@@ -26,16 +24,9 @@ class Doctor(models.Model):
     appointment_count = fields.Integer(compute='compute_appointment_count')
     patient_count = fields.Integer(compute='compute_patient_count')
 
-    speciality = fields.Many2one(
-        'pet_clinic.doctor.speciality', string='Speciality',  required=True)
-    speciality_name = fields.Char(related='speciality.name',
-                                  string='Speciality')
-
-    @api.depends('name', 'speciality_name')
-    def _compute_fields_rec_name(self):
-        for doctor in self:
-            doctor.rec_name = '{} spesialis {}'.format(doctor.name,
-                                                       doctor.speciality_name)
+    # Item
+    item_service = fields.Many2many(
+        'pet_clinic.item', string='Service', domain="[('item_type', '=', 'service')]")
 
     @api.model
     def create(self, vals):
@@ -63,9 +54,3 @@ class Doctor(models.Model):
         for record in self:
             record.appointment_count = self.env['pet_clinic.appointment'].search_count(
                 [('doctor', '=', self.id)])
-
-
-class DoctorSpeciality(models.Model):
-    _name = 'pet_clinic.doctor.speciality'
-
-    name = fields.Char(string='Name', required=True)

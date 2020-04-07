@@ -7,8 +7,14 @@
         <field name="arch" type="xml">
             <form string="Create Visitation">
                 <group>
-                    <field name="appointment" />
-                    <field name="date" />
+                    <group>
+                        <field name="owner" />
+                        <field name="pet" />
+                    </group>
+                    <group>
+                        <field name="date" />
+                        <field name="doctor" />
+                    </group>
                 </group>
                 <footer>
                     <button name="create_visitation" string="Create" type="object" class="btn-primary" />

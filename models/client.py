@@ -60,7 +60,7 @@ class Client(models.Model):
     def open_client_appointment(self):
         return {
             'name': _('Appointments'),
-            'domain': [('pet_owner_id', '=', self.id)],
+            'domain': [('owner_id', '=', self.id)],
             'view_type': 'form',
             'res_model': 'pet_clinic.appointment',
             'view_id': False,
@@ -72,4 +72,4 @@ class Client(models.Model):
     def compute_appointment_count(self):
         for record in self:
             record.appointment_count = self.env['pet_clinic.appointment'].search_count(
-                [('pet_owner_id', '=', self.id)])
+                [('owner_id', '=', self.id)])

@@ -7,8 +7,8 @@
             <field name="arch" type="xml">
                 <tree decoration-info="state == 'draft'" decoration-muted="state == 'canceled'" decoration-success="state == 'done'" decoration-danger="state == 'in_process'">
                     <field name="visitation_id" />
-                    <field name="pet_rec_name" />
-                    <field name="pet_owner" />
+                    <field name="pet" />
+                    <field name="owner" />
                     <field name="date" />
                     <field name="doctor_name" />
                     <field name="state" />
@@ -23,7 +23,7 @@
             <field name="arch" type="xml">
                 <form string="Pet">
                     <header>
-                        <button name="%(pet_clinic.create_service_wizard)d" string="Create Visitation" type="action" class="oe_highlight" context="{'default_visitation': active_id}" />
+                        <button name="%(pet_clinic.create_service_wizard)d" string="Create Service" type="action" class="oe_highlight" context="{'default_visitation': active_id}" />
                         <button name="action_check" type="object" string="Check" class="oe_highlight" states="draft" />
                         <button name="action_done" type="object" string="Done" class="oe_highlight" attrs="{'invisible': [('state','!=', 'in_process')]}" />
                         <button name="action_cancel" type="object" string="Cancel" />
@@ -37,11 +37,11 @@
                         </div>
                         <group>
                             <group>
-                                <field name="pet_rec_name" />
-                                <field name="pet_owner" />
+                                <field name="pet" />
+                                <field name="owner" />
                             </group>
                             <group>
-                                <field name="doctor_name" />
+                                <field name="doctor" />
                                 <field name="date" />
                             </group>
                         </group>
@@ -68,7 +68,7 @@
                 <kanban default_group_by="state" class="o_kanban_small_column">
                     <field name="id" />
                     <field name="visitation_id" />
-                    <field name="pet_rec_name" />
+                    <field name="pet" />
                     <field name="doctor_name" />
                     <field name="date" />
                     <templates>
@@ -92,7 +92,7 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <span>
-                                            <field name="pet_rec_name" />
+                                            <field name="pet" />
                                         </span>
                                     </div>
                                 </div>

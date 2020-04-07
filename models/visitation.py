@@ -12,7 +12,7 @@ class Visitation(models.Model):
 
     visitation_id = fields.Char(string='ID', required=True, copy=False, readonly=True,
                                 index=True, default=lambda self: _('New'))
-    date = fields.Datetime(string='Date Start', required=True)
+    date = fields.Datetime(string='Date', required=True)
     state = fields.Selection([
         ('draft', 'Draft'),
         ('in_process', 'In Process'),
@@ -21,15 +21,17 @@ class Visitation(models.Model):
     ], string='Status', default='draft')
     description = fields.Text(string='Description')
 
+    # Owner
+    owner = fields.Many2one(
+        'pet_clinic.client', required=True)
+    owner_id = fields.Integer(related='owner.id')
+
     # Pet
-    pet = fields.Many2one(
-        'pet_clinic.pet', required=True)
+    pet = fields.Many2one('pet_clinic.pet', required=True,
+                          domain="[('owner', '=', owner)]")
     pet_rec_name = fields.Char(related='pet.rec_name', string='Pet Recname')
-    pet_id = fields.Char(related='pet.pet_id', string='Pet')
+    pet_id = fields.Integer(related='pet.id', string='Pet')
     pet_name = fields.Char(related='pet.name', string='Pet')
-    pet_owner_id = fields.Integer(
-        related='pet.owner_id')
-    pet_owner = fields.Char(related='pet.owner_name', string='Owner')
 
     # Doctor
     doctor = fields.Many2one(

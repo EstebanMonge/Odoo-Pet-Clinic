@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields
+from datetime import time
 
 
 class CreateVisitation(models.TransientModel):
@@ -8,27 +9,22 @@ class CreateVisitation(models.TransientModel):
     _description = 'Create visitation Wizard'
 
     appointment = fields.Many2one(
-        'pet_clinic.appointment', string="Appointment", required=True)
-    appointment_date = fields.Datetime(
-        related='appointment.date', string='Date')
-    _defaults = {
-        'date': appointment_date
-    }
+        'pet_clinic.appointment')
+    owner = fields.Many2one('pet_clinic.client',
+                            required=True)
+    pet = fields.Many2one(
+        'pet_clinic.pet', required=True)
     doctor = fields.Many2one(
         'pet_clinic.doctor', required=True)
     date = fields.Datetime(string='Date', required=True)
 
-    def action_confirm(self):
-        for rec in self.appointment:
-            rec.state = 'confirmed'
-
     def create_visitation(self):
         vals = {
-            'appointment': self.appointment.id,
+            'owner': self.owner.id,
+            'pet': self.pet.id,
             'date': self.date,
-            'doctor': self.doctor
+            'doctor': self.doctor.id
         }
-        self.action_confirm()
         self.appointment.message_post(
             body="new visitation Created", subject="visitation Creation")
         # creating visitations from the code

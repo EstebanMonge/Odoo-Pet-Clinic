@@ -7,6 +7,7 @@
       <field name="arch" type="xml">
         <tree decoration-info="state == 'draft'" decoration-muted="state == 'canceled'" decoration-success="state == 'confirmed'">
           <field name="appointment_id" />
+          <field name="owner" />
           <field name="pet" />
           <field name="doctor" />
           <field name="date" />
@@ -22,7 +23,7 @@
       <field name="arch" type="xml">
         <form string="Pet">
           <header>
-            <button name="%(pet_clinic.create_visitation_wizard)d" string="Create Visitation" type="action" class="oe_highlight" context="{'default_appointment': active_id}" attrs="{'invisible': [('state','=', 'canceled')]}" />
+            <button name="%(pet_clinic.create_visitation_wizard)d" string="Create Visitation" type="action" class="oe_highlight" context="{'default_appointment':active_id,'default_owner':owner,'default_pet':pet,'default_doctor':doctor,'default_date':date}" attrs="{'invisible': [('state','!=', 'confirmed')]}" />
             <button name="action_confirm" type="object" string="Confirm" class="oe_highlight" states="draft" />
             <button name="action_cancel" type="object" string="Cancel" />
             <field name="state" widget="statusbar" statusbar_visible="draft,confirmed" />
@@ -35,11 +36,11 @@
             </div>
             <group name="data">
               <group>
-                <field name="pet_id" />
+                <field name="owner" />
                 <field name="pet" />
-                <field name="pet_owner" />
               </group>
               <group>
+                <field name="item_service" />
                 <field name="doctor" />
                 <field name="date" />
               </group>
@@ -65,7 +66,7 @@
         <kanban default_group_by="state" class="o_kanban_small_column">
           <field name="id" />
           <field name="appointment_id" />
-          <field name="doctor" />
+          <field name="doctor_name" />
           <field name="pet" />
           <field name="date" />
           <templates>

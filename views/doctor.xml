@@ -8,7 +8,6 @@
         <tree string="Doctor">
           <field name="doctor_id" />
           <field name="name" />
-          <field name="speciality" />
         </tree>
       </field>
     </record>
@@ -42,11 +41,13 @@
                 <field name="gender" />
               </group>
               <group>
-                <field name="speciality" />
                 <field name="phone" />
                 <field name="email" />
                 <field name="address" />
               </group>
+            </group>
+            <group name="Speciality">
+              <field name="item_service" />
             </group>
           </sheet>
           <div class="oe_chatter">
@@ -68,8 +69,7 @@
           <field name="image" />
           <field name="name" />
           <field name="phone" />
-          <field name="email" />
-          <field name="speciality" />
+          <field name="age" />
           <templates>
             <t t-name="kanban-box">
               <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_pet_clinic_docotr_kanban">
@@ -87,15 +87,11 @@
                   <ul>
                     <li>
                       Age :
+                      <field name="age" />
+                    </li>
+                    <li>
+                      Phone :
                       <field name="phone" />
-                    </li>
-                    <li>
-                      Doctor :
-                      <field name="email" />
-                    </li>
-                    <li>
-                      Spesialis :
-                      <field name="speciality" />
                     </li>
                   </ul>
                 </div>
@@ -113,12 +109,12 @@
       <field name="arch" type="xml">
         <search string="Search Doctor">
           <field name="name" filter_domain="['|',('name', 'ilike', self),('doctor_id', 'ilike', self)]" />
-          <field name="speciality" />
+          <field name="item_service" />
           <field name="doctor_id" />
           <field name="name" />
           <separator />
           <group expand="0" string="Group By">
-            <filter string="Speciality" name="speciality" context="{'group_by':'speciality'}" />
+            <filter string="Speciality" name="item_service" context="{'group_by':'item_service'}" />
           </group>
         </search>
       </field>
@@ -126,7 +122,7 @@
 
     <!-- Doctor Action Window -->
     <record model="ir.actions.act_window" id="doctor_clinic_doctor_action_window">
-      <field name="name">doctor</field>
+      <field name="name">Doctor</field>
       <field name="res_model">pet_clinic.doctor</field>
       <field name="view_mode">tree,form,kanban</field>
     </record>
@@ -134,7 +130,9 @@
     <!-- Menu Root -->
     <menuitem name="Pet Clinic" id="pet_clinic.root_menu" web_icon="pet_clinic,static/description/icon.png" />
     />
+    <!-- Menu Master Data -->
+    <menuitem name="Master Data" id="pet_clinic.master_data" parent="pet_clinic.root_menu" />
     <!-- Menu Doctor -->
-    <menuitem name="Doctor" id="pet_clinic.doctor" parent="pet_clinic.root_menu" action="doctor_clinic_doctor_action_window" />
+    <menuitem name="Doctor" id="pet_clinic.doctor" parent="pet_clinic.master_data" action="doctor_clinic_doctor_action_window" />
   </data>
 </odoo>

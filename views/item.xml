@@ -126,7 +126,10 @@
         <!-- Menu Root -->
         <menuitem name="Pet Clinic" id="pet_clinic.root_menu" web_icon="pet_clinic,static/description/icon.png" />
         />
+        <!-- Menu Master Data -->
+        <menuitem name="Master Data" id="pet_clinic.master_data" parent="pet_clinic.root_menu" />
+
         <!-- Menu Item -->
-        <menuitem name="Item" id="pet_clinic.item" parent="pet_clinic.root_menu" action="item_clinic_item_action_window" />
+        <menuitem name="Item" id="pet_clinic.item" parent="pet_clinic.master_data" action="item_clinic_item_action_window" />
     </data>
 </odoo>

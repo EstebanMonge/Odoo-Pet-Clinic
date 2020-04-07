@@ -23,22 +23,28 @@ class Appointment(models.Model):
     ], string='Status', default='draft')
     description = fields.Text(string='Description')
 
+    # Owner
+    owner = fields.Many2one(
+        'pet_clinic.client', required=True)
+    owner_id = fields.Integer(related='owner.id')
+
     # Pet
-    pet = fields.Many2one(
-        'pet_clinic.pet', required=True)
+    pet = fields.Many2one('pet_clinic.pet', required=True,
+                          domain="[('owner', '=', owner)]")
     pet_rec_name = fields.Char(related='pet.rec_name', string='Pet Recname')
-    pet_id = fields.Char(related='pet.pet_id', string='Pet')
+    pet_id = fields.Integer(related='pet.id', string='Pet')
     pet_name = fields.Char(related='pet.name', string='Pet')
-    pet_owner_id = fields.Integer(
-        related='pet.owner_id')
-    pet_owner = fields.Char(related='pet.owner_name', string='Owner')
+
+    # Item
+    item_service = fields.Many2one(
+        'pet_clinic.item', string='Service', required=True, domain="[('item_type', '=', 'service')]")
 
     # Doctor
     doctor = fields.Many2one(
-        'pet_clinic.doctor', required=True)
+        'pet_clinic.doctor', required=True, domain="[('item_service', '=', item_service)]")
+    doctor_id = fields.Integer(related='doctor.id', string='Doctor')
     doctor_name = fields.Char(related='doctor.name', string='Doctor')
-    
-    
+
     @api.model
     def create(self, vals):
         if vals.get('appointment_id', _('New')) == _('New'):

@@ -25,9 +25,11 @@ class Item(models.Model):
 
     currency_id = fields.Many2one('res.currency', string='Currency',
                                   default=lambda self: self.env.user.company_id.currency_id)
-
     item_category = fields.Many2one(
         'pet_clinic.item.category', string='Category')
+
+    # Doctor
+    doctor = fields.Many2one('pet_clinic.doctor')
 
     @api.depends('name', 'internal_reference')
     def _compute_fields_rec_name(self):
